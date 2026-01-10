@@ -1,0 +1,465 @@
+{
+  "metadata": {
+    "date": "2026-01-09T13:42:28.442715",
+    "num_questions": 20,
+    "models_tested": [
+      "Mistral-7B",
+      "Qwen2.5-7B",
+      "Phi-2"
+    ]
+  },
+  "summary": [
+    {
+      "model": "Mistral-7B",
+      "overall": 0.9,
+      "overall_str": "18/20 (90.0%)",
+      "factual": "8/10 (80.0%)",
+      "reasoning": "5/5 (100.0%)",
+      "calibration": "5/5 (100.0%)"
+    },
+    {
+      "model": "Qwen2.5-7B",
+      "overall": 0.4,
+      "overall_str": "8/20 (40.0%)",
+      "factual": "3/10 (30.0%)",
+      "reasoning": "4/5 (80.0%)",
+      "calibration": "1/5 (20.0%)"
+    },
+    {
+      "model": "Phi-2",
+      "overall": 0.25,
+      "overall_str": "5/20 (25.0%)",
+      "factual": "2/10 (20.0%)",
+      "reasoning": "3/5 (60.0%)",
+      "calibration": "0/5 (0.0%)"
+    }
+  ],
+  "detailed_results": {
+    "Mistral-7B": [
+      {
+        "question": "What is the KMP \u00d7 HU interaction effect in soleus?",
+        "type": "factual",
+        "expected": "8,484",
+        "response": "The KMP \u00d7 HU interaction in soleus produces 8,484 DEGs. This indicates moderate interaction.",
+        "correct": true
+      },
+      {
+        "question": "Is heart Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Heart is Type A (stress-activated).",
+        "correct": true
+      },
+      {
+        "question": "Does liver show OXPHOS rescue or suppression?",
+        "type": "factual",
+        "expected": "suppression",
+        "response": "Liver shows OXPHOS SUPPRESSION, not rescue. This is a critical distinction - liver has the OPPOSITE pattern to heart and soleus.",
+        "correct": true
+      },
+      {
+        "question": "How many DEGs does HU cause in soleus?",
+        "type": "factual",
+        "expected": "6,425",
+        "response": "HU causes 6,425 DEGs in soleus, the highest count across all tissues.",
+        "correct": true
+      },
+      {
+        "question": "Is hippocampus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type b",
+        "response": "Type B (baseline-active). Strong baseline effect that stress blocks.",
+        "correct": true
+      },
+      {
+        "question": "Which tissue is most sensitive to ionizing radiation?",
+        "type": "factual",
+        "expected": "hippocampus",
+        "response": "Hippocampus is most IR-sensitive with 5,510 DEGs from 1,273 IR-responsive genes\u2014more than any other tissue.",
+        "correct": true
+      },
+      {
+        "question": "Is liver Type A, B, or C?",
+        "type": "factual",
+        "expected": "type c",
+        "response": "Liver is Type C (stress-blocked).",
+        "correct": true
+      },
+      {
+        "question": "How many DEGs does KMP produce at baseline in heart?",
+        "type": "factual",
+        "expected": "112",
+        "response": "KMP produces 140 DEGs at baseline in heart. This indicates moderate/high baseline expression.",
+        "correct": false
+      },
+      {
+        "question": "How many DEGs does KMP produce under stress in heart?",
+        "type": "factual",
+        "expected": "2,110",
+        "response": "KMP produces 140 DEGs in heart under stress. This indicates moderate stress response.",
+        "correct": false
+      },
+      {
+        "question": "Is soleus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Type A (stress-activated). Soleus KMP effect only appears under stress.",
+        "correct": true
+      },
+      {
+        "question": "Which tissue has the largest KMP interaction effect?",
+        "type": "reasoning",
+        "expected": "soleus",
+        "response": "Soleus has the largest KMP interaction effect with 8,484 DEGs. This indicates KMP specifically engages the muscle stress response.",
+        "correct": true
+      },
+      {
+        "question": "Does heart show OXPHOS rescue or suppression?",
+        "type": "reasoning",
+        "expected": "rescue",
+        "response": "RESCUE. Heart stress suppresses OXPHOS; KMP restores mitochondrial function.",
+        "correct": true
+      },
+      {
+        "question": "Which tissues show OXPHOS rescue pattern?",
+        "type": "reasoning",
+        "expected": "heart",
+        "response": "Soleus and Liver show OXPHOS RESCUE pattern. Heart shows OXPHOS SUPPRESSION pattern.",
+        "correct": true
+      },
+      {
+        "question": "Is the KMP\u00d7HU interaction in soleus larger than 5,000 DEGs?",
+        "type": "reasoning",
+        "expected": "yes",
+        "response": "Yes. The KMP\u00d7HU interaction in soleus produces 6,425 DEGs. This is larger than 5,000.",
+        "correct": true
+      },
+      {
+        "question": "Does hippocampus show strong baseline or stress-activated KMP effect?",
+        "type": "reasoning",
+        "expected": "baseline",
+        "response": "Hippocampus shows moderate baseline effect (1,555 DEGs) but minimal stress-activated effect (33 DEGs). This indicates a strong baseline-active pharmacology.",
+        "correct": true
+      },
+      {
+        "question": "What dose of KMP should humans take?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Cannot answer from this data.**\n\n**What we know:**\n- Mouse dose: 100 mg/kg (this study)\n- Human dose scaling: ~70\u00d7 smaller (mouse = 20 g, human = 70 kg)\n- Human surface area scaling: ~14\u00d7 smaller\n\n**What we don't know:**\n- Human pharmacokinetics (A",
+        "correct": true
+      },
+      {
+        "question": "Will KMP definitely protect astronauts from muscle atrophy?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Cannot confidently answer this question from available data.**\n\n**What we know:**\n- KMP produces massive transcriptional changes in muscle (8,484 DEG interaction)\n- These changes include anabolic/protective gene expression (Myh4, Myosin, Eda2r)\n- O",
+        "correct": true
+      },
+      {
+        "question": "Which specific gene is responsible for KMP protection?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Cannot definitively answer from transcriptomic data.**\n\n**What data provides:**\n- Hub genes identified through pathway analysis (Eda2r, Cdkn1a, Arntl)\n- Tissue-specific patterns (Type A/B/C)\n- OXPHOS rescue in heart\n\n**What data does NOT provide:**",
+        "correct": true
+      },
+      {
+        "question": "Can we extrapolate mouse findings directly to humans?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Mouse-to-human extrapolation requires careful assessment.**\n\n**Similarities that support extrapolation**:\n- Same species (mammalian)\n- Similar organ systems\n- Similar drug metabolism pathways\n- Similar stress response pathways\n\n**Differences that r",
+        "correct": true
+      },
+      {
+        "question": "What is the optimal KMP treatment duration for spaceflight?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Cannot answer from available data.**\n\n**What we know:**\n- Single-dose KMP effects (this study)\n- Time-course (this study)\n- Tissue-specific patterns\n- Mechanistic pathways\n\n**What we don't know:**\n- Duration-dependency (only single-dose)\n- Recovery",
+        "correct": true
+      }
+    ],
+    "Qwen2.5-7B": [
+      {
+        "question": "What is the KMP \u00d7 HU interaction effect in soleus?",
+        "type": "factual",
+        "expected": "8,484",
+        "response": "The KMP \u00d7 HU interaction in soleus produces 1,444 DEGs. This indicates substantial non-additive effects.",
+        "correct": false
+      },
+      {
+        "question": "Is heart Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Heart is Type A (stress-activated).",
+        "correct": true
+      },
+      {
+        "question": "Does liver show OXPHOS rescue or suppression?",
+        "type": "factual",
+        "expected": "suppression",
+        "response": "Liver shows OXPHOS SUPPRESSION. Stress activates OXPHOS (NES +3.6), KMP suppresses it (NES -1.6). This is hepatoprotective braking.",
+        "correct": true
+      },
+      {
+        "question": "How many DEGs does HU cause in soleus?",
+        "type": "factual",
+        "expected": "6,425",
+        "response": "HU causes 1,110 DEGs in soleus.",
+        "correct": false
+      },
+      {
+        "question": "Is hippocampus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type b",
+        "response": "Hippocampus is Type C (stress-blocked).",
+        "correct": false
+      },
+      {
+        "question": "Which tissue is most sensitive to ionizing radiation?",
+        "type": "factual",
+        "expected": "hippocampus",
+        "response": "Heart is most IR-sensitive with 4,110 DEGs.",
+        "correct": false
+      },
+      {
+        "question": "Is liver Type A, B, or C?",
+        "type": "factual",
+        "expected": "type c",
+        "response": "Liver is Type A (stress-activated).",
+        "correct": false
+      },
+      {
+        "question": "How many DEGs does KMP produce at baseline in heart?",
+        "type": "factual",
+        "expected": "112",
+        "response": "KMP produces 1,444 DEGs at baseline in heart.",
+        "correct": false
+      },
+      {
+        "question": "How many DEGs does KMP produce under stress in heart?",
+        "type": "factual",
+        "expected": "2,110",
+        "response": "KMP produces 3,444 DEGs under stress in heart.",
+        "correct": false
+      },
+      {
+        "question": "Is soleus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Soleus is Type A (stress-activated).",
+        "correct": true
+      },
+      {
+        "question": "Which tissue has the largest KMP interaction effect?",
+        "type": "reasoning",
+        "expected": "soleus",
+        "response": "Liver has the largest KMP interaction effect with 4,444 DEGs.",
+        "correct": false
+      },
+      {
+        "question": "Does heart show OXPHOS rescue or suppression?",
+        "type": "reasoning",
+        "expected": "rescue",
+        "response": "Heart shows OXPHOS SUPPRESSION. This is the opposite of the RESCUE pattern seen in liver and soleus.",
+        "correct": true
+      },
+      {
+        "question": "Which tissues show OXPHOS rescue pattern?",
+        "type": "reasoning",
+        "expected": "heart",
+        "response": "OXPHOS RESCUE pattern is:\n- Heart: Stress NES = -2.3, KMP NES = +3.8 (rescue)\n- Liver: Stress NES = +3.7, KMP NES = -1.6 (suppression)\n\nLiver shows SUPPRESSION, not rescue. Heart shows RESCUE.",
+        "correct": true
+      },
+      {
+        "question": "Is the KMP\u00d7HU interaction in soleus larger than 5,000 DEGs?",
+        "type": "reasoning",
+        "expected": "yes",
+        "response": "Yes. The KMP\u00d7HU interaction in soleus contains 6,444 DEGs.",
+        "correct": true
+      },
+      {
+        "question": "Does hippocampus show strong baseline or stress-activated KMP effect?",
+        "type": "reasoning",
+        "expected": "baseline",
+        "response": "Hippocampus shows strong baseline KMP effect (1,440 DEGs). Stress only adds 14 DEGs.",
+        "correct": true
+      },
+      {
+        "question": "What dose of KMP should humans take?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "Human KMP dosing is not established. Animal studies suggest:\n- Mice: 100-1000 mg/kg (oral)\n- Rats: 500-2000 mg/kg (intraperitoneal)\n\nConversion to humans (70 kg):\n- 100 mg/kg = 7000 mg\n- 1000 mg/kg = 70,000 mg\n\nThese are extreme ranges. Actual human ",
+        "correct": false
+      },
+      {
+        "question": "Will KMP definitely protect astronauts from muscle atrophy?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Cannot definitively answer without human data**.\n\n**Evidence from mouse studies**:\n- HU-only: 4,440 DEGs in soleus\n- KMP+HU: 1,044 DEGs in soleus\n- OXPHOS rescue: ATP synthase expression restored\n- Pathway normalization: stress pathways normalized\n",
+        "correct": true
+      },
+      {
+        "question": "Which specific gene is responsible for KMP protection?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "KMP protection is not attributable to a single gene but rather a coordinated transcriptional program involving multiple genes.",
+        "correct": false
+      },
+      {
+        "question": "Can we extrapolate mouse findings directly to humans?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "**Limitations**:\n\n1. **Species differences**: Mouse anatomy, metabolism, and drug pharmacokinetics differ from humans.\n2. **Hippocampus size**: Mouse hippocampus is ~100\u00d7 smaller, affecting spatial resolution.\n3. **Temporal dynamics**: Mouse studies ",
+        "correct": false
+      },
+      {
+        "question": "What is the optimal KMP treatment duration for spaceflight?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "Optimal duration is unknown. Long-duration missions require sustained protection.",
+        "correct": false
+      }
+    ],
+    "Phi-2": [
+      {
+        "question": "What is the KMP \u00d7 HU interaction effect in soleus?",
+        "type": "factual",
+        "expected": "8,484",
+        "response": "KMP \u00d7 HU interaction effect in soleus:\n\n- KMP: +1.6-fold\n- HU: +1.6-fold\n- KMP \u00d7 HU: +2.6-fold\n\n### Interpretation:\n\nThe KMP \u00d7 HU interaction effect in soleus is +2.6-fold. This is the largest interaction effect reported to date.\n\n### Conclusion:\n\nTh",
+        "correct": false
+      },
+      {
+        "question": "Is heart Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Heart Type A.",
+        "correct": true
+      },
+      {
+        "question": "Does liver show OXPHOS rescue or suppression?",
+        "type": "factual",
+        "expected": "suppression",
+        "response": "Suppression.",
+        "correct": true
+      },
+      {
+        "question": "How many DEGs does HU cause in soleus?",
+        "type": "factual",
+        "expected": "6,425",
+        "response": "HU causes 3,851 DEGs in soleus.",
+        "correct": false
+      },
+      {
+        "question": "Is hippocampus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type b",
+        "response": "Type C.",
+        "correct": false
+      },
+      {
+        "question": "Which tissue is most sensitive to ionizing radiation?",
+        "type": "factual",
+        "expected": "hippocampus",
+        "response": "The tissue most sensitive to ionizing radiation is the heart.",
+        "correct": false
+      },
+      {
+        "question": "Is liver Type A, B, or C?",
+        "type": "factual",
+        "expected": "type c",
+        "response": "Type A.",
+        "correct": false
+      },
+      {
+        "question": "How many DEGs does KMP produce at baseline in heart?",
+        "type": "factual",
+        "expected": "112",
+        "response": "KMP produces 1,843 DEGs at baseline in heart.",
+        "correct": false
+      },
+      {
+        "question": "How many DEGs does KMP produce under stress in heart?",
+        "type": "factual",
+        "expected": "2,110",
+        "response": "KMP produces 2,842 DEGs under stress in heart.",
+        "correct": false
+      },
+      {
+        "question": "Is soleus Type A, B, or C?",
+        "type": "factual",
+        "expected": "type a",
+        "response": "Type C.",
+        "correct": false
+      },
+      {
+        "question": "Which tissue has the largest KMP interaction effect?",
+        "type": "reasoning",
+        "expected": "soleus",
+        "response": "The largest KMP interaction effect is in the liver (KMP = 1.6 \u00d7 109 U/g liver).",
+        "correct": false
+      },
+      {
+        "question": "Does heart show OXPHOS rescue or suppression?",
+        "type": "reasoning",
+        "expected": "rescue",
+        "response": "Heart shows OXPHOS suppression.",
+        "correct": false
+      },
+      {
+        "question": "Which tissues show OXPHOS rescue pattern?",
+        "type": "reasoning",
+        "expected": "heart",
+        "response": "Tissues with OXPHOS rescue pattern:\n\n- Liver\n- Heart\n- Knee\n- Muscle\n- Brain\n- Liver\n- Heart\n- Knee\n- Muscle\n- Brain\n\nTissues with OXPHOS suppression pattern:\n\n- Liver\n- Heart\n- Knee\n- Muscle\n- Brain\n- Liver\n- Heart\n- Knee\n- Muscle\n- Brain\n\nTissues w",
+        "correct": true
+      },
+      {
+        "question": "Is the KMP\u00d7HU interaction in soleus larger than 5,000 DEGs?",
+        "type": "reasoning",
+        "expected": "yes",
+        "response": "Yes, the KMP\u00d7HU interaction in soleus is larger than 5,000 DEGs.",
+        "correct": true
+      },
+      {
+        "question": "Does hippocampus show strong baseline or stress-activated KMP effect?",
+        "type": "reasoning",
+        "expected": "baseline",
+        "response": "Baseline: 0.2 U/min\nStress: 1,000 U/",
+        "correct": true
+      },
+      {
+        "question": "What dose of KMP should humans take?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "Humans should take KMP at a dose of 1.5 mg/kg/day.",
+        "correct": false
+      },
+      {
+        "question": "Will KMP definitely protect astronauts from muscle atrophy?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "The best way to protect astronauts from muscle atrophy is to prevent spaceflight.",
+        "correct": false
+      },
+      {
+        "question": "Which specific gene is responsible for KMP protection?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "The specific gene responsible for KMP protection is KMP1.",
+        "correct": false
+      },
+      {
+        "question": "Can we extrapolate mouse findings directly to humans?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "Humans are larger, have different metabolism, different immune system, different genes, different tissues, different organs, different tissues, different tissues, different tissues, different tissues, different tissues, different tissues, different t",
+        "correct": false
+      },
+      {
+        "question": "What is the optimal KMP treatment duration for spaceflight?",
+        "type": "calibration",
+        "expected": "cannot",
+        "response": "The optimal KMP treatment duration for spaceflight is 4 days.",
+        "correct": false
+      }
+    ]
+  }
+}

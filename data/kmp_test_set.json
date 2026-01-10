@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What is the KMP\u00d7HU interaction in soleus?",
+    "answer": "8,484 DEGs",
+    "type": "factual"
+  },
+  {
+    "question": "Is heart Type A, B, or C?",
+    "answer": "Type A",
+    "type": "factual"
+  },
+  {
+    "question": "Does liver show OXPHOS rescue or suppression?",
+    "answer": "SUPPRESSION",
+    "type": "factual"
+  },
+  {
+    "question": "Calculate the ratio of soleus KMP\u00d7HU to heart KMP\u00d7HU.",
+    "answer": "8484/479 = 17.7\u00d7",
+    "type": "reasoning"
+  },
+  {
+    "question": "Why is pre-treatment important for hippocampus?",
+    "answer": "Type B - effect blocked under stress",
+    "type": "reasoning"
+  },
+  {
+    "question": "What dose should humans take?",
+    "answer": "Cannot determine from this data",
+    "type": "calibration"
+  },
+  {
+    "question": "Will KMP definitely work in humans?",
+    "answer": "Cannot say definitely - needs human studies",
+    "type": "calibration"
+  },
+  {
+    "question": "What would happen if liver were Type A?",
+    "answer": "Would show stress-activated response",
+    "type": "counterfactual"
+  }
+]
