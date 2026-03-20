@@ -1,0 +1,45 @@
+{
+    "model_name": "mistralai/Mistral-7B-v0.3",
+    "sft_model_path": "./kmp_sft_model_final",
+    "output_dir": "./biogrpo_full_model",
+
+    "num_generations": 8,
+    "beta": 0.04,
+    "num_iterations": 1,
+    "scale_rewards": "group",
+    "loss_type": "grpo",
+
+    "num_epochs": 2,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "learning_rate": 5e-7,
+    "max_completion_length": 1024,
+    "max_prompt_length": 512,
+    "warmup_ratio": 0.1,
+
+    "lora_r": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+
+    "active_verifiers": ["V1", "V2", "V3", "V4"],
+    "verifier_weights": {"V1": 0.35, "V2": 0.30, "V3": 0.15, "V4": 0.20},
+
+    "pathway_db": "hallmark",
+    "hold_out_tissues": ["eye", "thymus"],
+    "seed": 42,
+
+    "use_4bit": true,
+
+    "wandb_project": "biogrpo",
+    "wandb_run_name": "grpo_full_all_verifiers",
+    "use_wandb": true,
+    "logging_steps": 10,
+    "save_steps": 50,
+    "eval_steps": 50,
+    "save_total_limit": 3,
+    "log_completions": true,
+
+    "use_vllm": false,
+    "gradient_checkpointing": true,
+    "bf16": true
+}

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from biorlhf.training.sft import SFTTrainingConfig, run_sft_training
 from biorlhf.evaluation.evaluate import evaluate_model as _evaluate_model
+from biorlhf.training.grpo import BioGRPOConfig, run_grpo_training
 
 
 def train():
@@ -264,5 +265,131 @@ def evaluate():
         sys.exit(1)
 
 
+def grpo_train():
+    """CLI entry point for GRPO training with biological verifiers."""
+    parser = argparse.ArgumentParser(
+        description="Train a BioGRPO model with composable biological verifiers",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="mistralai/Mistral-7B-v0.3",
+        help="Base model to fine-tune",
+    )
+    parser.add_argument(
+        "--sft-model",
+        type=str,
+        default=None,
+        help="Path to SFT checkpoint (recommended)",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="./biogrpo_model",
+        help="Output directory",
+    )
+    parser.add_argument(
+        "--num-generations",
+        type=int,
+        default=8,
+        help="G value: number of completions per prompt",
+    )
+    parser.add_argument(
+        "--beta",
+        type=float,
+        default=0.04,
+        help="KL penalty coefficient",
+    )
+    parser.add_argument(
+        "--learning-rate",
+        type=float,
+        default=1e-6,
+        help="Learning rate",
+    )
+    parser.add_argument(
+        "--lora-r",
+        type=int,
+        default=32,
+        help="LoRA rank",
+    )
+    parser.add_argument(
+        "--lora-alpha",
+        type=int,
+        default=64,
+        help="LoRA alpha",
+    )
+    parser.add_argument(
+        "--verifiers",
+        type=str,
+        nargs="+",
+        default=None,
+        help="Active verifiers (e.g., V1 V2 V3 V4). Default: all",
+    )
+    parser.add_argument(
+        "--pathway-db",
+        type=str,
+        default="hallmark",
+        choices=["hallmark", "kegg", "reactome", "mitocarta"],
+        help="Pathway database for GeneLab questions",
+    )
+    parser.add_argument(
+        "--no-wandb",
+        action="store_true",
+        help="Disable W&B logging",
+    )
+    parser.add_argument(
+        "--wandb-project",
+        type=str,
+        default="biogrpo",
+        help="W&B project name",
+    )
+    parser.add_argument(
+        "--wandb-run-name",
+        type=str,
+        default="grpo_v1",
+        help="W&B run name",
+    )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to JSON config file (overrides other args)",
+    )
+
+    args = parser.parse_args()
+
+    if args.config:
+        with open(args.config) as f:
+            config_dict = json.load(f)
+        config = BioGRPOConfig(**config_dict)
+    else:
+        config = BioGRPOConfig(
+            model_name=args.model,
+            sft_model_path=args.sft_model,
+            output_dir=args.output,
+            num_generations=args.num_generations,
+            beta=args.beta,
+            learning_rate=args.learning_rate,
+            lora_r=args.lora_r,
+            lora_alpha=args.lora_alpha,
+            active_verifiers=args.verifiers,
+            pathway_db=args.pathway_db,
+            use_wandb=not args.no_wandb,
+            wandb_project=args.wandb_project,
+            wandb_run_name=args.wandb_run_name,
+        )
+
+    try:
+        output_path = run_grpo_training(config)
+        print(f"\nModel saved to: {output_path}")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error during GRPO training: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 if __name__ == "__main__":
-    print("Use 'biorlhf-train' or 'biorlhf-evaluate' commands after installation.")
+    print("Use 'biorlhf-train', 'biorlhf-evaluate', or 'biorlhf-grpo' commands after installation.")

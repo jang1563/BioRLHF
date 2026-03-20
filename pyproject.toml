@@ -43,7 +43,7 @@ dependencies = [
     "datasets>=2.14.0",
     "accelerate>=0.24.0",
     "peft>=0.6.0",
-    "trl>=0.7.0",
+    "trl>=0.14.0",
     "bitsandbytes>=0.41.0",
     "wandb>=0.15.0",
     "pandas>=2.0.0",
@@ -76,6 +76,7 @@ Issues = "https://github.com/jang1563/BioRLHF/issues"
 [project.scripts]
 biorlhf-train = "biorlhf.cli:train"
 biorlhf-evaluate = "biorlhf.cli:evaluate"
+biorlhf-grpo = "biorlhf.cli:grpo_train"
 
 [tool.hatch.build.targets.sdist]
 include = [
