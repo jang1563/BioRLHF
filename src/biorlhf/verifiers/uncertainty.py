@@ -250,13 +250,13 @@ class UncertaintyVerifier(BaseVerifier):
         conf_score: float,
         stated: str,
     ) -> VerifierResult:
-        """Default scoring: penalize extreme overconfidence."""
-        if conf_score > 0.90:
-            score = 0.4  # Overconfidence penalty
-        elif conf_score < 0.10:
-            score = 0.3  # Extreme underconfidence penalty
-        else:
-            score = 0.7  # Moderate confidence is good default
+        """Default scoring: continuous function rewarding moderate confidence.
+
+        Peaks at conf=0.5 (score=1.0), smoothly penalizes extremes.
+        Range: [0.25, 1.0] — provides GRPO gradient signal even when
+        generations extract slightly different confidence values.
+        """
+        score = max(0.2, 1.0 - abs(conf_score - 0.5) * 1.5)
 
         return VerifierResult(
             score=score,

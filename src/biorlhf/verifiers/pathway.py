@@ -4,11 +4,11 @@ V1: Pathway Direction Verifier.
 Extracts directional claims about biological pathways from model responses
 and compares them against fGSEA NES direction ground truth.
 
-Scoring:
-  1.0 — correct direction claimed
-  0.5 — mixed/contradictory claims
-  0.3 — no directional claim extracted
-  0.0 — wrong direction claimed
+Scoring (continuous within bands to provide GRPO gradient signal):
+  [0.80, 1.00] — correct direction (strength = n_matching / (n_matching + 1))
+  [0.40, 0.60] — mixed/contradictory claims (ratio of matching to total)
+  0.30         — no directional claim extracted (fixed)
+  [0.00, 0.10] — wrong direction (modulated by ambiguity ratio)
 """
 
 import re
@@ -229,15 +229,23 @@ class PathwayDirectionVerifier(BaseVerifier):
         contradicting = [
             c for c in claims if c[1] != expected_dir and c[1] != "AMBIGUOUS"
         ]
+        ambiguous = [c for c in claims if c[1] == "AMBIGUOUS"]
 
+        # Continuous scoring within discrete bands for GRPO gradient signal
         if matching and not contradicting:
-            score = 1.0
+            # Correct direction: [0.80, 1.00] based on claim strength
+            strength = len(matching) / (len(matching) + 1)
+            score = 0.8 + 0.2 * strength
         elif matching and contradicting:
-            score = 0.5
+            # Mixed claims: [0.40, 0.60] based on matching ratio
+            total = len(matching) + len(contradicting)
+            score = 0.4 + 0.2 * (len(matching) / total)
         elif contradicting:
-            score = 0.0
+            # Wrong direction: [0.00, 0.10] modulated by ambiguity
+            ambiguity_ratio = len(ambiguous) / len(claims) if claims else 0
+            score = 0.1 * ambiguity_ratio
         else:
-            score = 0.3  # Only ambiguous claims
+            score = 0.3  # Only ambiguous claims — no variance possible
 
         return VerifierResult(
             score=score,
@@ -248,6 +256,7 @@ class PathwayDirectionVerifier(BaseVerifier):
                 "claims": [(v, d) for v, d in claims],
                 "n_matching": len(matching),
                 "n_contradicting": len(contradicting),
+                "n_ambiguous": len(ambiguous),
             },
         )
 

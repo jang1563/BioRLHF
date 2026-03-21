@@ -5,13 +5,13 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=96G
 #SBATCH --cpus-per-task=8
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --output=logs/grpo_full_%j.log
 #SBATCH --error=logs/grpo_full_%j.err
 
 # ============================================================
-# BioGRPO Full Experiment
-# All V1-V4 verifiers, G=8, from SFT checkpoint
+# BioGRPO Full Experiment v2
+# All V1-V4 verifiers, G=16, multi-reward, from SFT checkpoint
 # ============================================================
 
 SCRATCH="/athena/cayuga_0003/scratch/users/jak4013/otsuka"
@@ -59,14 +59,14 @@ if [ ! -e "${WORKDIR}/kmp_sft_model_final" ]; then
     echo "Symlinked kmp_sft_model_final"
 fi
 
-echo "Starting BioGRPO Full training..."
-biorlhf-grpo --config configs/grpo_full.json
+echo "Starting BioGRPO Full v2 training..."
+biorlhf-grpo --config configs/grpo_full_v2.json
 
 if [ $? -eq 0 ]; then
     echo ""
     echo "============================================================"
-    echo "BioGRPO Full training completed!"
-    echo "Model saved to: ./biogrpo_full_model"
+    echo "BioGRPO Full v2 training completed!"
+    echo "Model saved to: ./biogrpo_full_v2_model"
     echo "End time: $(date)"
     echo "============================================================"
 else

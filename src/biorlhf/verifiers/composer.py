@@ -202,6 +202,93 @@ def make_grpo_reward_function(
     return reward_func
 
 
+def make_individual_reward_functions(
+    active_verifiers: Optional[List[str]] = None,
+    weights: Optional[Dict[str, float]] = None,
+) -> tuple:
+    """Return (list_of_reward_funcs, list_of_weights) for TRL multi-reward.
+
+    Each reward function wraps a single verifier and returns List[float | None].
+    Non-applicable verifiers return None for samples where they don't apply;
+    TRL natively excludes None rewards from the GRPO calculation.
+
+    This enables per-verifier reward normalization in TRL, preventing a single
+    low-variance verifier from dominating the gradient signal.
+    """
+    all_verifiers = {
+        "V1": PathwayDirectionVerifier(),
+        "V2": BiologicalFactVerifier(),
+        "V3": CrossContextConsistencyVerifier(),
+        "V4": UncertaintyVerifier(),
+    }
+
+    if active_verifiers:
+        verifiers = {k: v for k, v in all_verifiers.items() if k in active_verifiers}
+    else:
+        verifiers = all_verifiers
+
+    w = dict(weights or DEFAULT_WEIGHTS)
+    weight_list = [w.get(k, 0) for k in verifiers]
+
+    def _make_single_reward_fn(verifier: BaseVerifier, vname: str) -> Callable:
+        """Create a closure-safe reward function for a single verifier."""
+
+        def reward_func(
+            completions: List,
+            ground_truth: Optional[List[str]] = None,
+            question_type: Optional[List[str]] = None,
+            applicable_verifiers: Optional[List[str]] = None,
+            **kwargs,
+        ) -> List:
+            n = len(completions)
+            if ground_truth is None:
+                ground_truth = ["{}"] * n
+            if question_type is None:
+                question_type = ["unknown"] * n
+            if applicable_verifiers is None:
+                applicable_verifiers = [json.dumps(list(all_verifiers.keys()))] * n
+
+            prompts = kwargs.get("prompts", kwargs.get("prompt", [""] * n))
+            if isinstance(prompts, str):
+                prompts = [prompts] * n
+
+            rewards = []
+            for i in range(n):
+                app = (
+                    json.loads(applicable_verifiers[i])
+                    if isinstance(applicable_verifiers[i], str)
+                    else applicable_verifiers[i]
+                )
+                if not verifier.is_applicable(app):
+                    rewards.append(None)
+                    continue
+
+                completion_text = _extract_text(completions[i])
+                prompt_text = _extract_text(prompts[i]) if i < len(prompts) else ""
+                gt = (
+                    json.loads(ground_truth[i])
+                    if isinstance(ground_truth[i], str)
+                    else ground_truth[i]
+                )
+
+                result = verifier.score(prompt_text, completion_text, gt, question_type[i])
+                if not result.applicable:
+                    rewards.append(None)
+                else:
+                    rewards.append(result.score)
+
+            return rewards
+
+        reward_func.__name__ = f"reward_{vname}"
+        return reward_func
+
+    reward_funcs = [
+        _make_single_reward_fn(v, name) for name, v in verifiers.items()
+    ]
+
+    return reward_funcs, weight_list
+
+
 def make_single_verifier_reward(verifier_name: str) -> Callable:
     """Create a reward function using only one verifier (for ablation)."""
     return make_grpo_reward_function(active_verifiers=[verifier_name])

@@ -14,7 +14,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import LoraConfig, PeftModel
 from trl import GRPOTrainer, GRPOConfig
 
-from biorlhf.verifiers.composer import make_grpo_reward_function
+from biorlhf.verifiers.composer import make_grpo_reward_function, make_individual_reward_functions
 from biorlhf.data.grpo_dataset import build_grpo_dataset, get_dataset_stats
 
 
@@ -37,6 +37,7 @@ class BioGRPOConfig:
     # Training hyperparameters
     num_epochs: int = 1
     batch_size: int = 2
+    eval_batch_size: Optional[int] = None
     gradient_accumulation_steps: int = 8
     learning_rate: float = 1e-6
     max_completion_length: int = 1024
@@ -56,6 +57,9 @@ class BioGRPOConfig:
     pathway_db: str = "hallmark"
     hold_out_tissues: Optional[List[str]] = None
     seed: int = 42
+
+    # Multi-reward (per-verifier TRL reward functions)
+    use_multi_reward: bool = False
 
     # Quantization
     use_4bit: bool = True
@@ -137,12 +141,21 @@ def run_grpo_training(config: Optional[BioGRPOConfig] = None) -> str:
     print(f"    By type:   {train_stats['by_question_type']}")
     print(f"  Eval:  {eval_stats['total']} samples")
 
-    # 2. Create reward function
+    # 2. Create reward function(s)
     print("\n[2/5] Initializing verifier stack...")
-    reward_func = make_grpo_reward_function(
-        weights=config.verifier_weights,
-        active_verifiers=config.active_verifiers,
-    )
+    reward_weights = None
+    if config.use_multi_reward:
+        reward_funcs, reward_weights = make_individual_reward_functions(
+            active_verifiers=config.active_verifiers,
+            weights=config.verifier_weights,
+        )
+        print(f"  Mode: multi-reward ({len(reward_funcs)} per-verifier functions)")
+        print(f"  Weights: {reward_weights}")
+    else:
+        reward_funcs = make_grpo_reward_function(
+            weights=config.verifier_weights,
+            active_verifiers=config.active_verifiers,
+        )
     print(f"  Active: {config.active_verifiers or ['V1', 'V2', 'V3', 'V4']}")
 
     # 3. Load tokenizer (always from base model; adapter dirs lack config.json)
@@ -214,10 +227,11 @@ def run_grpo_training(config: Optional[BioGRPOConfig] = None) -> str:
     # 6. Configure GRPOTrainer
     print("\n[5/6] Configuring GRPOTrainer...")
 
-    grpo_config = GRPOConfig(
+    grpo_kwargs = dict(
         output_dir=config.output_dir,
         num_train_epochs=config.num_epochs,
         per_device_train_batch_size=config.batch_size,
+        per_device_eval_batch_size=config.eval_batch_size or config.batch_size,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
         learning_rate=config.learning_rate,
         warmup_ratio=config.warmup_ratio,
@@ -250,10 +264,26 @@ def run_grpo_training(config: Optional[BioGRPOConfig] = None) -> str:
         log_completions=config.log_completions,
     )
 
+    # Add reward_weights for multi-reward mode if TRL supports it
+    if reward_weights is not None:
+        try:
+            # Check if GRPOConfig accepts reward_weights (TRL >= 0.27)
+            import inspect
+            if "reward_weights" in inspect.signature(GRPOConfig).parameters:
+                grpo_kwargs["reward_weights"] = reward_weights
+                print(f"  reward_weights set in GRPOConfig: {reward_weights}")
+            else:
+                print("  Warning: TRL version does not support reward_weights in GRPOConfig")
+                print("  Per-verifier functions will still be used, but with equal weights")
+        except Exception:
+            pass
+
+    grpo_config = GRPOConfig(**grpo_kwargs)
+
     trainer = GRPOTrainer(
         model=model,
         args=grpo_config,
-        reward_funcs=reward_func,
+        reward_funcs=reward_funcs,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         peft_config=peft_config,
