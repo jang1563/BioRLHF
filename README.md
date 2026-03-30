@@ -7,18 +7,32 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Biological Reinforcement Learning from Human Feedback** — A framework for fine-tuning LLMs on biological reasoning tasks with emphasis on factual accuracy, chain-of-thought reasoning, and uncertainty calibration.
+**Biological Reinforcement Learning from Human Feedback** — A framework for fine-tuning LLMs on biological reasoning tasks using SFT, DPO, and GRPO with verifier-based reward models for factual accuracy, calibrated uncertainty, and chain-of-thought reasoning.
 
 ## Highlights
 
-- **90% accuracy** on domain-specific biological reasoning tasks
-- **100% calibration accuracy** — model knows what it doesn't know
-- **Learns from 363 examples** — efficient domain adaptation
-- **Supports SFT and DPO** training pipelines
+- **Three-stage training pipeline**: SFT → DPO → GRPO with verifier-based rewards
+- **Multi-reward GRPO**: Four composable verifiers (factual, pathway, consistency, uncertainty) with configurable weights
+- **+19% reward improvement** over SFT baseline using GRPO (0.650 vs 0.547)
+- **-70% calibration error**: ECE reduced from 0.258 to 0.078 after GRPO
+- **90% accuracy** on domain-specific biological reasoning tasks (SFT stage)
+- **Learns from 363 examples** — efficient domain adaptation from spaceflight transcriptomics data
 
 ## Key Results
 
-### Model Comparison (20-question evaluation)
+### GRPO Training (Phase 3)
+
+| Metric | SFT Baseline | After GRPO | Improvement |
+|--------|-------------|------------|-------------|
+| Avg Reward | 0.547 | 0.650 | +19% |
+| ECE (Calibration Error) | 0.258 | 0.078 | -70% |
+
+**GRPO Configuration (Full v2):**
+- 16 generations per prompt (G=16) for robust advantage estimation
+- Multi-reward: V1 (factual, 0.35) + V2 (pathway, 0.30) + V3 (consistency, 0.15) + V4 (uncertainty, 0.20)
+- KL penalty beta=0.02, 2 iterations per batch, group-normalized rewards
+
+### Model Comparison (SFT, 20-question evaluation)
 
 | Model | Overall | Factual | Reasoning | Calibration |
 |-------|---------|---------|-----------|-------------|
@@ -26,7 +40,7 @@
 | Qwen2.5-7B | 40.0% | 30.0% | 80.0% | 20.0% |
 | Phi-2 | 25.0% | 20.0% | 60.0% | 0.0% |
 
-### Training Progression
+### SFT Training Progression
 
 | Version | Accuracy | Key Improvement |
 |---------|----------|-----------------|
@@ -37,12 +51,6 @@
 | **Final** | **90%** | Targeted drilling for remaining errors |
 
 ## Installation
-
-### From PyPI (coming soon)
-
-```bash
-pip install BioRLHF
-```
 
 ### From Source
 
@@ -60,27 +68,41 @@ pip install -e ".[dev]"
 
 ### GPU Requirements
 
-- NVIDIA GPU with 24GB+ VRAM (for 7B models with 4-bit quantization)
-- CUDA 11.8+ recommended
+- NVIDIA GPU with 48GB+ VRAM recommended (A40 or A100)
+- 24GB+ VRAM sufficient for SFT/DPO with 4-bit quantization
+- CUDA 12.1+ recommended
 
 ## Quick Start
 
-### Training a Model
+### SFT Training
 
 ```python
 from biorlhf import SFTTrainingConfig, run_sft_training
 
-# Configure training
 config = SFTTrainingConfig(
     model_name="mistralai/Mistral-7B-v0.3",
     dataset_path="data/kmp_sft_final.json",
-    output_dir="./my_biorlhf_model",
+    output_dir="./my_sft_model",
     num_epochs=10,
     learning_rate=1e-4,
 )
 
-# Run training
 model_path = run_sft_training(config)
+```
+
+### GRPO Training with Verifiers
+
+```bash
+# Using the CLI
+biorlhf-grpo --config configs/grpo_full_v2.json
+```
+
+```python
+# Or programmatically
+from biorlhf.training.grpo import GRPOConfig, run_grpo_training
+
+config = GRPOConfig.from_json("configs/grpo_full_v2.json")
+run_grpo_training(config)
 ```
 
 ### Creating a Dataset
@@ -88,7 +110,6 @@ model_path = run_sft_training(config)
 ```python
 from biorlhf.data import create_sft_dataset
 
-# Generate dataset from ground truth biological data
 dataset = create_sft_dataset(
     output_path="my_dataset.json",
     include_calibration=True,
@@ -104,7 +125,7 @@ print(f"Created {len(dataset)} training examples")
 from biorlhf import evaluate_model
 
 result = evaluate_model(
-    model_path="./my_biorlhf_model",
+    model_path="./my_sft_model",
     test_questions_path="data/kmp_test_set.json",
 )
 
@@ -120,7 +141,7 @@ print(f"Calibration: {result.calibration_accuracy:.1%}")
 from biorlhf.utils import load_model_for_inference, generate_response
 
 model, tokenizer = load_model_for_inference(
-    model_path="./my_biorlhf_model",
+    model_path="./my_sft_model",
     base_model="mistralai/Mistral-7B-v0.3",
 )
 
@@ -129,14 +150,56 @@ response = generate_response(model, tokenizer, prompt)
 print(response)
 ```
 
+## Architecture
+
+### Three-Stage Training Pipeline
+
+```
+Stage 1: SFT                    Stage 2: DPO                Stage 3: GRPO
+(Supervised Fine-Tuning)        (Direct Preference          (Group Relative Policy
+                                 Optimization)               Optimization)
+
+Mistral-7B-v0.3                 SFT model                   SFT model (merged)
+      |                              |                            |
+   LoRA (r=64, alpha=128)       Preference pairs            Generate G=16 completions
+      |                              |                            |
+   363 training examples         Ranked responses           Score with V1-V4 verifiers
+      |                              |                            |
+   10 epochs, lr=1e-4            beta=0.1                   Multi-reward composition
+      |                              |                            |
+   SFT Adapter                  DPO Model                   GRPO Model
+```
+
+### Verifier-Based Reward System (V1-V4)
+
+| Verifier | Name | Weight | What It Scores |
+|----------|------|--------|----------------|
+| **V1** | Factual | 0.35 | Exact match of biological facts (DEG counts, tissue names, directions) |
+| **V2** | Pathway | 0.30 | Correct pathway/gene set enrichment references (Hallmark, KEGG) |
+| **V3** | Consistency | 0.15 | Internal logical consistency within the response |
+| **V4** | Uncertainty | 0.20 | Appropriate confidence calibration and epistemic humility |
+
+The verifiers are composable via `RewardComposer` and can be individually weighted:
+
+```python
+from biorlhf.verifiers import RewardComposer
+
+composer = RewardComposer(
+    active_verifiers=["V1", "V2", "V3", "V4"],
+    weights={"V1": 0.35, "V2": 0.30, "V3": 0.15, "V4": 0.20},
+)
+
+reward = composer.score(question, response, ground_truth)
+```
+
 ## Dataset
 
-Training data is derived from a 2×2×2 factorial transcriptomic study:
+Training data is derived from a 2x2x2 factorial transcriptomic study:
 
 - **Drug**: Kaempferol (KMP) vs Control
 - **Stressor 1**: Hindlimb Unloading (HU) — simulates microgravity
 - **Stressor 2**: Ionizing Radiation (IR) — simulates space radiation
-- **Tissues**: Heart, Hippocampus, Liver, Soleus
+- **Tissues**: Heart, Hippocampus, Liver, Soleus (+ Eye, Thymus for GRPO hold-out)
 
 ### Training Example Types
 
@@ -149,8 +212,6 @@ Training data is derived from a 2×2×2 factorial transcriptomic study:
 | Error Correction | ~20 | Learning from mistakes |
 
 ### Ground Truth Data
-
-Access the biological ground truth data directly:
 
 ```python
 from biorlhf.data import (
@@ -170,53 +231,73 @@ print(STRESSOR_EFFECTS["Hippocampus"])
 
 ```
 BioRLHF/
-├── src/biorlhf/           # Main package
-│   ├── training/          # SFT and DPO trainers
-│   ├── data/              # Dataset creation utilities
-│   ├── evaluation/        # Model evaluation
-│   └── utils/             # Helper functions
-├── data/                  # Training datasets
-│   ├── kmp_sft_final.json
-│   └── kmp_test_set.json
-├── examples/              # Usage examples
-├── scripts/               # Training scripts
-├── tests/                 # Unit tests
-└── docs/                  # Documentation
+├── src/biorlhf/              # Main package
+│   ├── training/             # SFT, DPO, and GRPO trainers
+│   ├── data/                 # Dataset creation & ground truth
+│   ├── evaluation/           # Model evaluation & calibration
+│   ├── verifiers/            # V1-V4 reward verifiers
+│   │   ├── factual.py        #   V1: Factual accuracy scoring
+│   │   ├── pathway.py        #   V2: Pathway enrichment scoring
+│   │   ├── consistency.py    #   V3: Logical consistency scoring
+│   │   ├── uncertainty.py    #   V4: Calibration/uncertainty scoring
+│   │   └── composer.py       #   Multi-reward composition
+│   ├── utils/                # Model loading, inference helpers
+│   └── cli.py                # Command-line interface
+├── configs/                  # Training configurations
+│   ├── grpo_mve.json         #   Minimum viable experiment
+│   └── grpo_full_v2.json     #   Full multi-reward training
+├── data/                     # Training datasets
+│   ├── kmp_sft_final.json    #   363 SFT training examples
+│   └── kmp_test_set.json     #   20-question evaluation set
+├── examples/                 # Usage examples
+├── scripts/                  # SLURM job scripts & HPC guide
+├── tests/                    # Unit tests
+└── docs/                     # Documentation
 ```
 
 ## Scientific Contributions
 
-### 1. Fact Drilling Works
+### 1. Verifier-Based GRPO Improves Calibration
+
+- GRPO with V1-V4 verifiers reduced calibration error (ECE) by 70%
+- Multi-reward composition outperforms single-reward training
+- G=16 generations dramatically reduces zero-variance batches (from 50% to <5%)
+
+### 2. Fact Drilling Works for SFT
+
 - Initial training: 20% accuracy on key facts
 - After targeted repetition: 100% accuracy on drilled facts
-- **Insight**: LLMs need explicit reinforcement of specific facts
+- LLMs need explicit reinforcement of specific domain facts
 
-### 2. Calibration is Learnable
+### 3. Calibration is Learnable
+
 - Trained on "I cannot determine X from this data" examples
-- Mistral achieved 100% calibration accuracy
-- **Insight**: Uncertainty expression can be taught, not just prompted
+- Mistral achieved 100% calibration accuracy at SFT stage
+- GRPO further improved calibration via the V4 uncertainty verifier
 
-### 3. DPO is Fragile for Domain Knowledge
-- Aggressive DPO (β=0.05) destroyed learned knowledge
+### 4. DPO is Fragile for Domain Knowledge
+
+- Aggressive DPO (beta=0.05) destroyed learned knowledge
 - Model hallucinated unrelated content
-- **Insight**: Preference learning needs careful calibration in specialized domains
+- Preference learning needs careful tuning in specialized domains
 
-### 4. Architecture Matters More Than Size
+### 5. Architecture Matters More Than Size
+
 - Mistral-7B >> Qwen2.5-7B despite similar parameter counts
 - Phi-2 (2.7B) insufficient for complex biological reasoning
-- **Insight**: Model selection is critical for domain fine-tuning
+- Model selection is critical for domain fine-tuning
 
 ## Key Learnings for AI Safety
 
 1. **Honesty is trainable** — Models can learn appropriate epistemic humility
 2. **Domain grounding matters** — Anchoring to experimental truth prevents hallucination
-3. **Preference learning is fragile** — DPO can catastrophically forget domain knowledge
-4. **Evaluation drives improvement** — Systematic testing reveals specific failure modes
+3. **Multi-reward > single reward** — Decomposing correctness into verifiable dimensions improves learning signal
+4. **Preference learning is fragile** — DPO can catastrophically forget domain knowledge
+5. **Evaluation drives improvement** — Systematic testing reveals specific failure modes
 
 ## Related Projects
 
 - **[SpaceOmicsBench](https://github.com/jang1563/SpaceOmicsBench)** — 115-question benchmark for LLMs on spaceflight biomedical data
-- **CAMELOT** — Adversarial robustness benchmark for biological reasoning
 
 ## Citation
 
@@ -227,7 +308,8 @@ If you use BioRLHF in your research, please cite:
   author = {Kim, JangKeun},
   title = {BioRLHF: Biological Reinforcement Learning from Human Feedback},
   year = {2026},
-  url = {https://github.com/jang1563/BioRLHF}
+  url = {https://github.com/jang1563/BioRLHF},
+  note = {Fine-tuning LLMs for biological reasoning with verifier-based GRPO}
 }
 ```
 

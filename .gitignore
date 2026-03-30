@@ -193,3 +193,9 @@ biogrpo_mve_model/
 biogrpo_full_model/
 biogrpo_full_v2_model/
 data/*.json
+
+# Claude workspace
+.claude/
+
+# Archive
+biorlhf.zip

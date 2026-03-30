@@ -29,7 +29,7 @@ from tqdm import tqdm
 
 from biorlhf.data.grpo_dataset import build_grpo_dataset, get_dataset_stats
 from biorlhf.verifiers.composer import VerifierComposer
-from biorlhf.verifiers.uncertainty import _extract_confidence_simple
+from biorlhf.verifiers.uncertainty import _extract_confidence_simple, SimpleConfidence
 from biorlhf.evaluation.calibration import compute_calibration_metrics
 
 
@@ -37,11 +37,19 @@ def load_model(
     model_path: str,
     base_model: str = "mistralai/Mistral-7B-v0.3",
     use_4bit: bool = True,
+    sft_adapter: Optional[str] = None,
 ):
-    """Load a fine-tuned model with LoRA adapters."""
+    """Load a fine-tuned model with LoRA adapters.
+
+    For GRPO checkpoints trained on an SFT-merged base, pass sft_adapter
+    to first merge the SFT adapter before applying the GRPO adapter.
+    """
     print(f"  Base model: {base_model}")
+    if sft_adapter:
+        print(f"  SFT adapter (merge first): {sft_adapter}")
     print(f"  Adapter: {model_path}")
 
+    bnb_config = None
     if use_4bit:
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -49,24 +57,25 @@ def load_model(
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_use_double_quant=True,
         )
-        model = AutoModelForCausalLM.from_pretrained(
-            base_model,
-            quantization_config=bnb_config,
-            device_map="auto",
-            torch_dtype=torch.bfloat16,
-            trust_remote_code=True,
-        )
-    else:
-        model = AutoModelForCausalLM.from_pretrained(
-            base_model,
-            device_map="auto",
-            torch_dtype=torch.bfloat16,
-            trust_remote_code=True,
-        )
+
+    model = AutoModelForCausalLM.from_pretrained(
+        base_model,
+        quantization_config=bnb_config,
+        device_map="auto",
+        torch_dtype=torch.bfloat16,
+        trust_remote_code=True,
+    )
+
+    # If GRPO was trained on SFT-merged base, merge SFT first
+    if sft_adapter:
+        print("  Merging SFT adapter...")
+        model = PeftModel.from_pretrained(model, sft_adapter)
+        model = model.merge_and_unload()
 
     model = PeftModel.from_pretrained(model, model_path)
 
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    # Always load tokenizer from base model (adapter dirs lack config.json)
+    tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
@@ -133,8 +142,17 @@ def evaluate_with_verifiers(
             applicable_verifiers=applicable,
         )
 
-        # Extract confidence for calibration
-        conf = _extract_confidence_simple(response)
+        # Extract confidence for calibration (match V4's extraction method)
+        try:
+            from bioeval.scoring.calibration import extract_confidence
+            conf_extraction = extract_confidence(response)
+            conf = SimpleConfidence(
+                stated=conf_extraction.stated_confidence or "medium",
+                numeric=conf_extraction.confidence_score,
+                source="bioeval",
+            )
+        except ImportError:
+            conf = _extract_confidence_simple(response)
 
         results.append({
             "prompt": prompt[:100],
@@ -238,6 +256,10 @@ def main():
         "--no-4bit", action="store_true",
         help="Disable 4-bit quantization",
     )
+    parser.add_argument(
+        "--sft-adapter", type=str, default=None,
+        help="Path to SFT LoRA adapter to merge before applying GRPO adapter (for GRPO checkpoints trained on SFT-merged base)",
+    )
 
     args = parser.parse_args()
 
@@ -269,6 +291,7 @@ def main():
     print(f"\n[2/4] Evaluating GRPO model: {args.model}")
     model, tokenizer = load_model(
         args.model, args.base_model, use_4bit=not args.no_4bit,
+        sft_adapter=args.sft_adapter,
     )
     grpo_results = evaluate_with_verifiers(
         model, tokenizer, eval_dataset, composer,

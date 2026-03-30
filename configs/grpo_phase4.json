@@ -1,7 +1,7 @@
 {
     "model_name": "mistralai/Mistral-7B-v0.3",
     "sft_model_path": "./kmp_sft_model_final",
-    "output_dir": "./biogrpo_full_v2_model",
+    "output_dir": "./biogrpo_phase4_model",
 
     "num_generations": 16,
     "beta": 0.02,
@@ -25,7 +25,7 @@
 
     "use_multi_reward": true,
     "active_verifiers": ["V1", "V2", "V3", "V4"],
-    "verifier_weights": {"V1": 0.35, "V2": 0.30, "V3": 0.15, "V4": 0.20},
+    "verifier_weights": {"V1": 0.30, "V2": 0.15, "V3": 0.10, "V4": 0.45},
 
     "pathway_db": "hallmark",
     "hold_out_tissues": ["eye", "thymus"],
@@ -34,10 +34,10 @@
     "use_4bit": true,
 
     "wandb_project": "biogrpo",
-    "wandb_run_name": "grpo_full_v2_G16_multireward",
+    "wandb_run_name": "grpo_phase4_v1aware_V4w045",
     "use_wandb": true,
     "logging_steps": 10,
-    "save_steps": 250,
+    "save_steps": 500,
     "eval_steps": 9999,
     "save_total_limit": 3,
     "log_completions": true,

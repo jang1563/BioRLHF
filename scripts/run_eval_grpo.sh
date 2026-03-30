@@ -50,29 +50,60 @@ export BIOEVAL_DATA="${SCRATCH}/data/BioEval/data"
 export SPACEOMICS_DATA="${SCRATCH}/data/SpaceOmicsBench/v3/evaluation/llm"
 export BIOEVAL_ROOT="${SCRATCH}/data/BioEval"
 
-# Model paths
-GRPO_MODEL="./biogrpo_mve_model"
-SFT_BASELINE="./kmp_sft_model_final"
-OUTPUT="results/grpo_mve_eval_$(date +%Y%m%d_%H%M%S).json"
-
-echo "GRPO model:    $GRPO_MODEL"
-echo "SFT baseline:  $SFT_BASELINE"
-echo "Output:        $OUTPUT"
-echo ""
-
-# Check model exists
-if [ ! -d "$GRPO_MODEL" ]; then
-    echo "ERROR: GRPO model not found at $GRPO_MODEL"
-    echo "Available directories:"
+# Model paths — auto-detect MVE vs Full v2 vs checkpoint
+# Allow override: GRPO_MODEL_OVERRIDE and MAX_SAMPLES env vars
+if [ -n "$GRPO_MODEL_OVERRIDE" ]; then
+    GRPO_MODEL="$GRPO_MODEL_OVERRIDE"
+    HOLD_OUT="${HOLD_OUT_OVERRIDE:-eye thymus}"
+    EVAL_TAG="checkpoint"
+elif [ -d "./biogrpo_phase4_model" ]; then
+    GRPO_MODEL="./biogrpo_phase4_model"
+    HOLD_OUT="eye thymus"
+    EVAL_TAG="phase4"
+elif [ -d "./biogrpo_full_v2_model" ]; then
+    GRPO_MODEL="./biogrpo_full_v2_model"
+    HOLD_OUT="eye thymus"
+    EVAL_TAG="full_v2"
+elif [ -d "./biogrpo_mve_model" ]; then
+    GRPO_MODEL="./biogrpo_mve_model"
+    HOLD_OUT="eye"
+    EVAL_TAG="mve"
+else
+    echo "ERROR: No GRPO model found"
     ls -d biogrpo_* 2>/dev/null || echo "  No biogrpo_* dirs found"
     exit 1
 fi
+
+SFT_BASELINE="./kmp_sft_model_final"
+OUTPUT="results/grpo_${EVAL_TAG}_eval_$(date +%Y%m%d_%H%M%S).json"
+
+# For full_v2/checkpoint models, GRPO adapter was trained on SFT-merged base
+SFT_ADAPTER_FLAG=""
+if [ "$EVAL_TAG" = "phase4" ] || [ "$EVAL_TAG" = "full_v2" ] || [ "$EVAL_TAG" = "checkpoint" ]; then
+    SFT_ADAPTER_FLAG="--sft-adapter $SFT_BASELINE"
+fi
+
+MAX_SAMPLES_FLAG=""
+if [ -n "$MAX_SAMPLES" ]; then
+    MAX_SAMPLES_FLAG="--max-samples $MAX_SAMPLES"
+fi
+
+echo "GRPO model:    $GRPO_MODEL"
+echo "Eval type:     $EVAL_TAG"
+echo "Hold-out:      $HOLD_OUT"
+echo "SFT baseline:  $SFT_BASELINE"
+echo "SFT adapter:   ${SFT_ADAPTER_FLAG:-none}"
+echo "Max samples:   ${MAX_SAMPLES:-all}"
+echo "Output:        $OUTPUT"
+echo ""
 
 echo "Starting BioGRPO evaluation..."
 python scripts/evaluate_grpo.py \
     --model "$GRPO_MODEL" \
     --sft-baseline "$SFT_BASELINE" \
-    --hold-out-tissues eye \
+    --hold-out-tissues $HOLD_OUT \
+    $SFT_ADAPTER_FLAG \
+    $MAX_SAMPLES_FLAG \
     --output "$OUTPUT"
 
 if [ $? -eq 0 ]; then

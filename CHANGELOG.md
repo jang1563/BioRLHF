@@ -5,18 +5,45 @@ All notable changes to BioRLHF will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-03-22
 
 ### Added
-- GitHub Actions CI workflow for automated testing
-- Pre-commit hooks configuration
-- Unit tests for ground truth data and dataset creation
-- Example scripts (quickstart, train_sft, evaluate_model)
-- CONTRIBUTING.md guidelines
-- CHANGELOG.md
+- **GRPO training pipeline** with verifier-based reward models
+  - `GRPOConfig` and `run_grpo_training` for Group Relative Policy Optimization
+  - CLI command `biorlhf-grpo --config <path>` for GRPO training
+- **Verifier system (V1-V4)** for multi-dimensional reward scoring
+  - V1 (Factual): Exact match scoring for DEG counts, tissue names, directions
+  - V2 (Pathway): Pathway/gene set enrichment validation (Hallmark, KEGG)
+  - V3 (Consistency): Internal logical consistency checking
+  - V4 (Uncertainty): Calibration and epistemic humility scoring
+  - `RewardComposer` for weighted multi-reward composition
+- **GRPO dataset module** (`grpo_dataset.py`) for prompt-based training data with hold-out tissues
+- **GeneLab data loader** (`genelabloader.py`) for NES conservation questions
+- **Calibration evaluation** (`calibration.py`) with Expected Calibration Error (ECE) scoring
+- **Question generator** (`question_generator.py`) for automated biological question creation
+- GRPO training configs: `grpo_mve.json` (MVE) and `grpo_full_v2.json` (full multi-reward)
+- SLURM job scripts for GRPO training on HPC clusters
+- Hold-out tissue evaluation (eye, thymus) for generalization testing
 
 ### Changed
-- Updated README with additional badges (CI status, Ruff, PRs welcome)
+- Bumped version to 0.2.0
+- Updated README with GRPO architecture, verifier system, and latest results
+- V1 factual verifier: reduced negation window from 30 to 12 characters to prevent cross-clause false negation
+- V1/V4 verifiers: smoothed reward scoring for GRPO (continuous instead of binary)
+- Updated HPC training guide with GRPO workflow and SLURM configurations
+- Updated dependencies: TRL >= 0.14.0 (GRPO support), PEFT >= 0.6.0
+- Lazy imports in `evaluation/__init__.py` to avoid torch dependency at import time
+
+### Training Results
+- **MVE experiment** (G=4, V1+V4): Reward improved from 0.547 (SFT) to 0.650 (+19%), ECE reduced from 0.258 to 0.078 (-70%)
+- **Full v2 experiment** (G=16, V1-V4): Multi-reward training with zero-variance batch fraction <5% (vs 50% in MVE)
+
+### Fixed
+- LoRA adapter loading: properly load base model first, then merge SFT adapter
+- Tokenizer loading from adapter directories in Transformers 4.57+
+- TRL GRPOConfig: `scale_rewards` as string type, explicit `loss_type="grpo"`
+- Batch size compatibility: both `per_device_eval_batch_size` and `generation_batch_size` divisible by `num_generations`
+- BioEval ground truth serialization for dict-type answers
 
 ## [0.1.0] - 2025-01-09
 
@@ -40,6 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - LoRA adapter training
 - Weights & Biases integration for experiment tracking
 - HPC support with SLURM job scripts
+- GitHub Actions CI workflow for automated testing
+- Pre-commit hooks configuration
+- Unit tests for ground truth data and dataset creation
+- Example scripts (quickstart, train_sft, evaluate_model)
+- CONTRIBUTING.md guidelines
 
 ### Training Results
 - Achieved 90% overall accuracy on biological reasoning tasks
@@ -52,20 +84,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `kmp_test_set.json`: 20-question evaluation set
 - `kmp_dpo_preferences.json`: Preference pairs for DPO training
 
-### Dependencies
-- PyTorch >= 2.0.0
-- Transformers >= 4.36.0
-- TRL >= 0.7.0
-- PEFT >= 0.6.0
-- BitsAndBytes >= 0.41.0
-
 ---
 
 ## Version History Summary
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 0.2.0 | 2026-03-22 | GRPO pipeline, V1-V4 verifiers, multi-reward training |
 | 0.1.0 | 2025-01-09 | Initial release with SFT/DPO pipelines |
 
-[Unreleased]: https://github.com/jang1563/BioRLHF/compare/v0.1.0...HEAD
+[0.2.0]: https://github.com/jang1563/BioRLHF/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jang1563/BioRLHF/releases/tag/v0.1.0

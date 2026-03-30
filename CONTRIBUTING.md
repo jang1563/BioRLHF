@@ -26,7 +26,7 @@ Please be respectful and constructive in all interactions. We welcome contributo
    ```
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/ORIGINAL_OWNER/BioRLHF.git
+   git remote add upstream https://github.com/jang1563/BioRLHF.git
    ```
 
 ## Development Setup

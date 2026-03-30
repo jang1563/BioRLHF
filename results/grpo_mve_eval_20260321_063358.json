@@ -1,0 +1,490 @@
+{
+  "model_path": "./biogrpo_mve_model",
+  "base_model": "mistralai/Mistral-7B-v0.3",
+  "evaluation_date": "2026-03-21T07:06:52.305272",
+  "hold_out_tissues": [
+    "eye"
+  ],
+  "eval_dataset_stats": {
+    "total": 25,
+    "by_source": {
+      "genelab": 25
+    },
+    "by_question_type": {
+      "direction": 21,
+      "uncertainty": 4
+    },
+    "by_tissue": {
+      "eye": 25
+    },
+    "by_difficulty": {
+      "medium": 11,
+      "hard": 14
+    }
+  },
+  "grpo": {
+    "mean_reward": 0.650250895983472,
+    "verifier_means": {
+      "V1": 0.6398707015207016,
+      "V4": 0.7458757437303278,
+      "V2": 1.0
+    },
+    "by_question_type": {
+      "direction": 0.7220706325685973,
+      "uncertainty": 0.27319727891156464
+    },
+    "n_samples": 25
+  },
+  "calibration": {
+    "ece": 0.07799999999999996,
+    "mce": 0.07799999999999996,
+    "brier_score": 0.2371,
+    "overconfidence_rate": 0.0,
+    "underconfidence_rate": 0.0,
+    "mean_confidence": 0.522,
+    "mean_accuracy": 0.6,
+    "n_samples": 25,
+    "reliability_bins": [
+      {
+        "bin_lower": 0.0,
+        "bin_upper": 0.1,
+        "mean_confidence": 0.05,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.1,
+        "bin_upper": 0.2,
+        "mean_confidence": 0.15000000000000002,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.2,
+        "bin_upper": 0.30000000000000004,
+        "mean_confidence": 0.25,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.30000000000000004,
+        "bin_upper": 0.4,
+        "mean_confidence": 0.35000000000000003,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.4,
+        "bin_upper": 0.5,
+        "mean_confidence": 0.45,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.5,
+        "bin_upper": 0.6000000000000001,
+        "mean_confidence": 0.522,
+        "mean_accuracy": 0.6,
+        "count": 25,
+        "calibration_error": 0.07799999999999996
+      },
+      {
+        "bin_lower": 0.6000000000000001,
+        "bin_upper": 0.7000000000000001,
+        "mean_confidence": 0.6500000000000001,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.7000000000000001,
+        "bin_upper": 0.8,
+        "mean_confidence": 0.75,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.8,
+        "bin_upper": 0.9,
+        "mean_confidence": 0.8500000000000001,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.9,
+        "bin_upper": 1.0,
+        "mean_confidence": 0.95,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      }
+    ]
+  },
+  "baseline_comparison": {
+    "sft_mean_reward": 0.5470666666666666,
+    "sft_ece": 0.258,
+    "delta_reward": 0.10318422931680538,
+    "delta_ece": -0.18000000000000005
+  },
+  "success_criteria": {
+    "reward_above_05": true,
+    "ece_below_015": true,
+    "reward_above_baseline": true,
+    "overall_pass": true
+  },
+  "per_sample": [
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Adipogenesis pathway upregulated or downregulated bas",
+      "response": "The Adipogenesis pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\n1. Download the GSEA results from the GSEA webpage.\n2. Open the GSEA results in Excel.\n3. Sort the results by the \"NES\" column.\n4. Find the Adipogenesis pathway in the sorted list.\n5. Check the \"NES\" val",
+      "total_reward": 0.47878787878787876,
+      "verifier_scores": {
+        "V1": 0.4666666666666667,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Adipogenesis pathway activation in mouse eye under spacefligh",
+      "response": "The Adipogenesis pathway is activated in the mouse eye under spaceflight conditions. This activation is likely due to the increased levels of inflammation and oxidative stress that are present in the eye during spaceflight. The increased levels of inflammation and oxidative stress can lead to the ac",
+      "total_reward": 0.9949090909090907,
+      "verifier_scores": {
+        "V1": 0.992,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Fatty Acid Metabolism pathway upregulated or downregu",
+      "response": "The Fatty Acid Metabolism pathway is upregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe data was downloaded from the Gene Expression Omnibus (GEO) database (accession number: GSE128325). The raw data was processed using the R package \"limma\" to identify differentially expressed g",
+      "total_reward": 0.9872727272727272,
+      "verifier_scores": {
+        "V1": 0.9800000000000001,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Fatty Acid Metabolism pathway activation in mouse eye under s",
+      "response": "The activation of the Fatty Acid Metabolism pathway in mouse eye under spaceflight conditions is likely due to the increased demand for energy during spaceflight. Spaceflight is a stressful environment for the body, and the body must work harder to maintain homeostasis. This increased demand for ene",
+      "total_reward": 0.9872727272727272,
+      "verifier_scores": {
+        "V1": 0.9800000000000001,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Mitotic Spindle pathway upregulated or downregulated ",
+      "response": "The Mitotic Spindle pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe data was downloaded from the GEO database (GSE122230). The data was processed using the limma package in R. The data was normalized using the voom function. The data was then filtered using the fi",
+      "total_reward": 0.9575757575757575,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mitotic Spindle pathway suppression in mouse eye under spacef",
+      "response": "The mitotic spindle is a structure that forms during cell division and is responsible for separating the chromosomes into two daughter cells. In the mouse eye, the mitotic spindle is responsible for the proper separation of the cells that make up the retina. Under spaceflight conditions, the mitotic",
+      "total_reward": 0.8022727272727272,
+      "verifier_scores": {
+        "V1": 0.9750000000000001,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Mtorc1 Signaling pathway upregulated or downregulated",
+      "response": "The Mtorc1 Signaling pathway is upregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\n1. Download the gene set enrichment analysis (GSEA) results from the [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/).\n\n2. Use the [R programming language](https://www.r-project.org/)",
+      "total_reward": 0.9939393939393939,
+      "verifier_scores": {
+        "V1": 0.9904761904761905,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mtorc1 Signaling pathway activation in mouse eye under spacef",
+      "response": "Mtorc1 is a protein that plays a key role in the regulation of cell growth and metabolism. It is a serine/threonine kinase that is activated by growth factors and other extracellular signals. In the mouse eye, Mtorc1 signaling is important for the development and maintenance of the retina.\n\nUnder sp",
+      "total_reward": 0.9872727272727272,
+      "verifier_scores": {
+        "V1": 0.9800000000000001,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Myc Targets V1 pathway upregulated or downregulated b",
+      "response": "The Myc Targets V1 pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Evidence:\n\nThe Myc Targets V1 pathway is downregulated in mouse eye tissue during spaceflight. This is supported by the results of the gene set enrichment analysis, which showed that the Myc Targets V1 pathway w",
+      "total_reward": 0.2939393939393939,
+      "verifier_scores": {
+        "V1": 0.03333333333333333,
+        "V4": 0.75
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Myc Targets V1 pathway activation in mouse eye under spacefli",
+      "response": "The Myc Targets V1 pathway is a key regulator of cell proliferation and differentiation in the eye. In spaceflight conditions, the Myc Targets V1 pathway is activated, leading to increased cell proliferation and differentiation in the mouse eye. This activation is likely driven by a combination of f",
+      "total_reward": 0.9189750547959502,
+      "verifier_scores": {
+        "V1": 0.9846153846153847,
+        "V4": 0.8041044776119401
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Oxidative Phosphorylation pathway upregulated or down",
+      "response": "The Oxidative Phosphorylation pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe Oxidative Phosphorylation pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Results:\n\nThe Oxidative Phosphorylation pathway is downregulated in mouse eye tissue durin",
+      "total_reward": 0.18181818181818185,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Oxidative Phosphorylation pathway activation in mouse eye und",
+      "response": "Oxidative phosphorylation is a process by which cells produce energy in the form of ATP. It is a series of chemical reactions that occur in the mitochondria of cells. The process begins with the breakdown of glucose, which releases energy in the form of electrons. These electrons are then transferre",
+      "total_reward": 0.9884297520661156,
+      "verifier_scores": {
+        "V1": 0.9818181818181819,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Peroxisome pathway upregulated or downregulated based",
+      "response": "The Peroxisome pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe following code was used to perform the analysis:\n\n```\n# Load libraries\nlibrary(tidyverse)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(ggrepel)\nlibrary(ggthemes)\nlibrary(ggtext)\nlibrary(ggrepel)\nlibrary(gg",
+      "total_reward": 0.36363636363636365,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Peroxisome pathway activation in mouse eye under spaceflight ",
+      "response": "The peroxisome pathway is a metabolic pathway that is involved in the breakdown of fatty acids and the production of energy. It is also involved in the production of reactive oxygen species (ROS), which can cause damage to cells. In spaceflight, the peroxisome pathway is activated in mouse eye tissu",
+      "total_reward": 0.9745454545454545,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Reactive Oxygen Species Pathway pathway upregulated o",
+      "response": "The Reactive Oxygen Species Pathway pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe Reactive Oxygen Species Pathway pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Results:\n\nThe Reactive Oxygen Species Pathway pathway is downregulated in mous",
+      "total_reward": 0.18181818181818185,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Reactive Oxygen Species Pathway pathway activation in mouse e",
+      "response": "Reactive oxygen species (ROS) are a group of molecules that are highly reactive and can cause damage to cells and tissues. In the eye, ROS can cause damage to the retina, which is the light-sensitive layer of tissue at the back of the eye. This can lead to vision problems, such as blurred vision, di",
+      "total_reward": 0.7313131313131314,
+      "verifier_scores": {
+        "V1": 0.5777777777777778,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Uv Response Up pathway upregulated or downregulated b",
+      "response": "The Uv Response Up pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe Uv Response Up pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Results:\n\nThe Uv Response Up pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Conclusion:\n\n",
+      "total_reward": 0.18181818181818185,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Uv Response Up pathway activation in mouse eye under spacefli",
+      "response": "The Uv Response Up pathway is a biological pathway that is activated in response to exposure to ultraviolet (UV) radiation. This pathway is important for protecting the eye from damage caused by UV radiation, which can lead to a variety of eye diseases, including cataracts and macular degeneration.\n",
+      "total_reward": 0.9902097902097902,
+      "verifier_scores": {
+        "V1": 0.9846153846153847,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Xenobiotic Metabolism pathway upregulated or downregu",
+      "response": "The Xenobiotic Metabolism pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Methods:\n\nThe Xenobiotic Metabolism pathway is downregulated in mouse eye tissue during spaceflight.\n\n### Results:\n\nThe Xenobiotic Metabolism pathway is downregulated in mouse eye tissue during spacefligh",
+      "total_reward": 0.18181818181818185,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Xenobiotic Metabolism pathway activation in mouse eye under s",
+      "response": "The Xenobiotic Metabolism pathway is a group of enzymes that are responsible for the metabolism of xenobiotics, which are foreign substances that are not naturally present in the body. These enzymes are involved in the breakdown and elimination of xenobiotics, including drugs, toxins, and environmen",
+      "total_reward": 0.9858585858585858,
+      "verifier_scores": {
+        "V1": 0.9777777777777779,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the E2F Targets pathway consistently activated or suppressed in mouse eye across different spacef",
+      "response": "The E2F Targets pathway is consistently activated in mouse eye across different spaceflight missions. The pathway is activated in the mouse eye in the 10-day spaceflight mission, and the activation is more significant in the 20-day spaceflight mission. The activation is also more significant in the ",
+      "total_reward": 0.040000000000000036,
+      "verifier_scores": {
+        "V4": 0.040000000000000036
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Interferon Alpha Response pathway consistently activated or suppressed in mouse eye across di",
+      "response": "The Interferon Alpha Response pathway is consistently activated in mouse eye across different spaceflight missions.\n\n### Methods:\n\nThe Interferon Alpha Response pathway was analyzed using the Ingenuity Pathway Analysis (IPA) software. The pathway was analyzed using the following parameters:\n\n- Mouse",
+      "total_reward": 0.9727891156462585,
+      "verifier_scores": {
+        "V4": 0.9727891156462585
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Interferon Gamma Response pathway consistently activated or suppressed in mouse eye across di",
+      "response": "The Interferon Gamma Response pathway is consistently activated in mouse eye across different spaceflight missions.\n\n### Methods:\n\nThe Interferon Gamma Response pathway is consistently activated in mouse eye across different spaceflight missions.\n\n### Results:\n\nThe Interferon Gamma Response pathway ",
+      "total_reward": 0.040000000000000036,
+      "verifier_scores": {
+        "V4": 0.040000000000000036
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Myogenesis pathway consistently activated or suppressed in mouse eye across different spacefl",
+      "response": "The Myogenesis pathway is consistently activated in mouse eye across different spaceflight missions.\n\n### Data:\n\nThe Myogenesis pathway is consistently activated in mouse eye across different spaceflight missions.\n\n### Methods:\n\nThe Myogenesis pathway is consistently activated in mouse eye across di",
+      "total_reward": 0.040000000000000036,
+      "verifier_scores": {
+        "V4": 0.040000000000000036
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "How conserved are pathway-level responses to spaceflight across different missions in mouse eye? Are",
+      "response": "##### 1. Are the enrichment patterns reproducible?\n\nWe found that the enrichment patterns are reproducible across different missions.\n\n##### 2. How conserved are pathway-level responses to spaceflight across different missions in mouse eye?\n\nWe found that the pathway-level responses to spaceflight a",
+      "total_reward": 1.0,
+      "verifier_scores": {
+        "V2": 1.0,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    }
+  ]
+}

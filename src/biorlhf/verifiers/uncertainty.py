@@ -119,9 +119,18 @@ def _extract_confidence_simple(text: str) -> SimpleConfidence:
 
 
 class UncertaintyVerifier(BaseVerifier):
-    """V4: Verifies that model's confidence is appropriate for the question."""
+    """V4: Verifies that model's confidence is appropriate for the question.
+
+    In calibration-aware mode (Phase 4), V4 internally uses V1 to determine
+    whether the model's answer is factually correct, then sets the confidence
+    target accordingly: high confidence for correct answers, low for incorrect.
+    """
 
     name = "V4"
+
+    def __init__(self):
+        from biorlhf.verifiers.pathway import PathwayDirectionVerifier
+        self._v1 = PathwayDirectionVerifier()
 
     def score(
         self,
@@ -145,10 +154,24 @@ class UncertaintyVerifier(BaseVerifier):
             conf_score = simple.numeric
             stated = simple.stated
 
+        # Compute V1 score for calibration-aware mode on direction questions
+        v1_score = None
+        if expected_confidence and not correct_behavior and gt.get("direction"):
+            try:
+                v1_result = self._v1.score(prompt, completion, gt, question_type)
+                if v1_result.applicable:
+                    v1_score = v1_result.score
+            except Exception:
+                pass
+
         # Route to appropriate scoring
         if correct_behavior:
             return self._score_calibration_behavior(
                 completion, gt, conf_score, stated, correct_behavior,
+            )
+        elif expected_confidence and v1_score is not None:
+            return self._score_calibration_aware(
+                conf_score, stated, expected_confidence, v1_score,
             )
         elif expected_confidence:
             return self._score_confidence_alignment(
@@ -206,6 +229,45 @@ class UncertaintyVerifier(BaseVerifier):
                 "stated_confidence": stated,
                 "confidence_error": conf_error,
                 "behavior_correct": behavior_correct,
+                "using_bioeval": HAS_BIOEVAL,
+            },
+        )
+
+    def _score_calibration_aware(
+        self,
+        conf_score: float,
+        stated: str,
+        expected_confidence: str,
+        v1_score: float,
+    ) -> VerifierResult:
+        """Score confidence alignment using V1 correctness as calibration target.
+
+        For direction questions, sets the confidence target based on whether the
+        model actually got the direction right (V1 > 0.5) or wrong (V1 <= 0.5).
+        This creates a gradient signal: "be confident when right, uncertain when wrong."
+        """
+        v1_correct = v1_score > 0.5
+
+        if v1_correct:
+            target_conf = 0.80
+        else:
+            target_conf = 0.25
+
+        conf_error = abs(conf_score - target_conf)
+        score = max(0.1, 1.0 - conf_error * 2.0)
+
+        return VerifierResult(
+            score=score,
+            verifier_name=self.name,
+            details={
+                "mode": "calibration_aware",
+                "v1_score": v1_score,
+                "v1_correct": v1_correct,
+                "target_confidence": target_conf,
+                "actual_confidence": conf_score,
+                "stated_confidence": stated,
+                "confidence_error": conf_error,
+                "expected_level": expected_confidence,
                 "using_bioeval": HAS_BIOEVAL,
             },
         )

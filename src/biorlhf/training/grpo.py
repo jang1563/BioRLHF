@@ -38,6 +38,7 @@ class BioGRPOConfig:
     num_epochs: int = 1
     batch_size: int = 2
     eval_batch_size: Optional[int] = None
+    generation_batch_size: Optional[int] = None
     gradient_accumulation_steps: int = 8
     learning_rate: float = 1e-6
     max_completion_length: int = 1024
@@ -232,6 +233,7 @@ def run_grpo_training(config: Optional[BioGRPOConfig] = None) -> str:
         num_train_epochs=config.num_epochs,
         per_device_train_batch_size=config.batch_size,
         per_device_eval_batch_size=config.eval_batch_size or config.batch_size,
+        generation_batch_size=config.generation_batch_size or config.batch_size,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
         learning_rate=config.learning_rate,
         warmup_ratio=config.warmup_ratio,
