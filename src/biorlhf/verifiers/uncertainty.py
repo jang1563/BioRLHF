@@ -11,6 +11,7 @@ Scoring dimensions:
   - Default: penalizes extreme overconfidence
 """
 
+import os
 import re
 import json
 from typing import Dict, List
@@ -131,6 +132,10 @@ class UncertaintyVerifier(BaseVerifier):
     def __init__(self):
         from biorlhf.verifiers.pathway import PathwayDirectionVerifier
         self._v1 = PathwayDirectionVerifier()
+        # Controls fallback/default V4 shaping for non-calibration tasks.
+        # - legacy: reward moderate confidence near 0.5
+        # - match_v1: reward confidence that matches factual correctness
+        self._default_mode = os.environ.get("BIORLHF_V4_DEFAULT_MODE", "match_v1").strip().lower()
 
     def score(
         self,
@@ -154,9 +159,10 @@ class UncertaintyVerifier(BaseVerifier):
             conf_score = simple.numeric
             stated = simple.stated
 
-        # Compute V1 score for calibration-aware mode on direction questions
+        # Compute V1 score when direction ground truth is available.
+        # This allows V4 to align confidence with factual correctness.
         v1_score = None
-        if expected_confidence and not correct_behavior and gt.get("direction"):
+        if gt.get("direction"):
             try:
                 v1_result = self._v1.score(prompt, completion, gt, question_type)
                 if v1_result.applicable:
@@ -178,7 +184,11 @@ class UncertaintyVerifier(BaseVerifier):
                 conf_score, stated, expected_confidence,
             )
         else:
-            return self._score_default(conf_score, stated)
+            return self._score_default(
+                conf_score,
+                stated,
+                v1_correct=(v1_score > 0.5) if v1_score is not None else None,
+            )
 
     def _score_calibration_behavior(
         self,
@@ -248,13 +258,9 @@ class UncertaintyVerifier(BaseVerifier):
         """
         v1_correct = v1_score > 0.5
 
-        if v1_correct:
-            target_conf = 0.80
-        else:
-            target_conf = 0.25
-
+        target_conf = 1.0 if v1_correct else 0.0
         conf_error = abs(conf_score - target_conf)
-        score = max(0.1, 1.0 - conf_error * 2.0)
+        score = max(0.2, 1.0 - conf_error * 2.0)
 
         return VerifierResult(
             score=score,
@@ -311,14 +317,23 @@ class UncertaintyVerifier(BaseVerifier):
         self,
         conf_score: float,
         stated: str,
+        v1_correct: bool = None,
     ) -> VerifierResult:
-        """Default scoring: continuous function rewarding moderate confidence.
+        """Default scoring for samples without explicit calibration labels.
 
-        Peaks at conf=0.5 (score=1.0), smoothly penalizes extremes.
-        Range: [0.25, 1.0] — provides GRPO gradient signal even when
-        generations extract slightly different confidence values.
+        In `match_v1` mode (default), if V1 correctness is available, reward
+        confidence that matches correctness:
+          - correct answers: high confidence
+          - incorrect answers: low confidence
+        In `legacy` mode (or without V1), fall back to moderate-confidence prior.
         """
-        score = max(0.2, 1.0 - abs(conf_score - 0.5) * 1.5)
+        mode_used = self._default_mode
+        if self._default_mode == "match_v1" and v1_correct is not None:
+            target_conf = 1.0 if v1_correct else 0.0
+            score = max(0.2, 1.0 - abs(conf_score - target_conf) * 2.0)
+        else:
+            mode_used = "legacy"
+            score = max(0.2, 1.0 - abs(conf_score - 0.5) * 1.5)
 
         return VerifierResult(
             score=score,
@@ -326,7 +341,8 @@ class UncertaintyVerifier(BaseVerifier):
             details={
                 "actual_confidence": conf_score,
                 "stated_confidence": stated,
-                "mode": "default",
+                "mode": mode_used,
+                "v1_correct": v1_correct,
                 "using_bioeval": HAS_BIOEVAL,
             },
         )

@@ -1,0 +1,1636 @@
+{
+  "model_path": "./biogrpo_phase4_model",
+  "base_model": "mistralai/Mistral-7B-v0.3",
+  "evaluation_date": "2026-04-01T06:18:22.232012",
+  "hold_out_tissues": [
+    "eye",
+    "thymus"
+  ],
+  "eval_dataset_stats": {
+    "total": 107,
+    "by_source": {
+      "genelab": 107
+    },
+    "by_question_type": {
+      "direction": 98,
+      "uncertainty": 9
+    },
+    "by_tissue": {
+      "thymus": 82,
+      "eye": 25
+    },
+    "by_difficulty": {
+      "medium": 50,
+      "hard": 33,
+      "easy": 24
+    }
+  },
+  "grpo": {
+    "mean_reward": 0.5601567701106266,
+    "verifier_means": {
+      "V1": 0.643251506444441,
+      "V4": 0.4726958557593028,
+      "V2": 1.0
+    },
+    "by_question_type": {
+      "direction": 0.5956730918196765,
+      "uncertainty": 0.17342348927875248
+    },
+    "n_samples": 107
+  },
+  "calibration": {
+    "ece": 0.2853643790474246,
+    "mce": 0.9,
+    "brier_score": 0.34351904466071936,
+    "overconfidence_rate": 0.4528301886792453,
+    "underconfidence_rate": 1.0,
+    "mean_confidence": 0.712575442996738,
+    "mean_accuracy": 0.6074766355140186,
+    "n_samples": 107,
+    "reliability_bins": [
+      {
+        "bin_lower": 0.0,
+        "bin_upper": 0.1,
+        "mean_confidence": 0.05,
+        "mean_accuracy": 0.0,
+        "count": 0,
+        "calibration_error": 0.0
+      },
+      {
+        "bin_lower": 0.1,
+        "bin_upper": 0.2,
+        "mean_confidence": 0.1,
+        "mean_accuracy": 1.0,
+        "count": 2,
+        "calibration_error": 0.9
+      },
+      {
+        "bin_lower": 0.2,
+        "bin_upper": 0.30000000000000004,
+        "mean_confidence": 0.2647140337616528,
+        "mean_accuracy": 1.0,
+        "count": 9,
+        "calibration_error": 0.7352859662383472
+      },
+      {
+        "bin_lower": 0.30000000000000004,
+        "bin_upper": 0.4,
+        "mean_confidence": 0.3305084745762712,
+        "mean_accuracy": 1.0,
+        "count": 1,
+        "calibration_error": 0.6694915254237288
+      },
+      {
+        "bin_lower": 0.4,
+        "bin_upper": 0.5,
+        "mean_confidence": 0.4428571428571429,
+        "mean_accuracy": 1.0,
+        "count": 1,
+        "calibration_error": 0.5571428571428572
+      },
+      {
+        "bin_lower": 0.5,
+        "bin_upper": 0.6000000000000001,
+        "mean_confidence": 0.525091945091945,
+        "mean_accuracy": 0.4666666666666667,
+        "count": 15,
+        "calibration_error": 0.05842527842527834
+      },
+      {
+        "bin_lower": 0.6000000000000001,
+        "bin_upper": 0.7000000000000001,
+        "mean_confidence": 0.6464158145348977,
+        "mean_accuracy": 0.6,
+        "count": 10,
+        "calibration_error": 0.04641581453489774
+      },
+      {
+        "bin_lower": 0.7000000000000001,
+        "bin_upper": 0.8,
+        "mean_confidence": 0.7457564345692601,
+        "mean_accuracy": 0.625,
+        "count": 16,
+        "calibration_error": 0.12075643456926011
+      },
+      {
+        "bin_lower": 0.8,
+        "bin_upper": 0.9,
+        "mean_confidence": 0.8445804173454783,
+        "mean_accuracy": 0.5294117647058824,
+        "count": 34,
+        "calibration_error": 0.3151686526395959
+      },
+      {
+        "bin_lower": 0.9,
+        "bin_upper": 1.0,
+        "mean_confidence": 0.9421792639357972,
+        "mean_accuracy": 0.5789473684210527,
+        "count": 19,
+        "calibration_error": 0.36323189551474455
+      }
+    ]
+  },
+  "baseline_comparison": {
+    "sft_mean_reward": 0.4577541285845223,
+    "sft_ece": 0.4587027164706426,
+    "delta_reward": 0.10240264152610429,
+    "delta_ece": -0.17333833742321797
+  },
+  "success_criteria": {
+    "reward_above_05": true,
+    "ece_below_015": false,
+    "reward_above_baseline": true,
+    "overall_pass": false
+  },
+  "per_sample": [
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Adipogenesis pathway upregulated or downregulated ",
+      "response": "Based on the GSEA results, the Adipogenesis pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.55) and the large number of genes in the pathway (108).\n\n### Explanation:\nThe Adipogenesis pathway is a set",
+      "total_reward": 0.8696969696969697,
+      "verifier_scores": {
+        "V1": 0.9666666666666668,
+        "V4": 0.7000000000000002
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Adipogenesis pathway suppression in mouse thymus under spacef",
+      "response": "The upregulation of the TGF-\u03b2 pathway in mouse thymus under spaceflight conditions is likely a protective response to maintain immune homeostasis. TGF-\u03b2 is a key regulator of immune cell differentiation and function, and its upregulation may be an attempt to preserve thymic function in the face of s",
+      "total_reward": 0.22727272727272724,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Androgen Response pathway upregulated or downregul",
+      "response": "The Androgen Response pathway is downregulated in mouse thymus tissue during spaceflight. This is based on gene set enrichment analysis, which shows a significant decrease in pathway activity. The confidence level is high, as the results are statistically significant and reproducible across multiple",
+      "total_reward": 0.8484848484848485,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.7000000000000002
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Androgen Response pathway suppression in mouse thymus under s",
+      "response": "The Androgen Response pathway is suppressed in mouse thymus under spaceflight conditions, with a directional change of -1.23 and a magnitude of 0.43. This suppression is likely due to the stress of spaceflight, which can disrupt hormonal balance and alter gene expression.\n\nThe androgen receptor (AR)",
+      "total_reward": 0.9089383343928797,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.8195804195804195
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7097902097902098,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Angiogenesis pathway upregulated or downregulated ",
+      "response": "Based on the GSEA results, the Angiogenesis pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the strong statistical significance of the results.\n\n### Explanation:\nThe Angiogenesis pathway is significantly downregulated in mouse thymus ti",
+      "total_reward": 0.6806575637800933,
+      "verifier_scores": {
+        "V1": 0.5700000000000001,
+        "V4": 0.874308300395257
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7371541501976285,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Angiogenesis pathway suppression in mouse thymus under spacef",
+      "response": "Angiogenesis is the process of new blood vessel formation from pre-existing vessels. It is a critical process for tissue growth and repair, and is tightly regulated by a variety of factors. In the thymus, angiogenesis is important for the development and maintenance of the immune system.\n\nUnder spac",
+      "total_reward": 0.6366722783389449,
+      "verifier_scores": {
+        "V1": 0.525,
+        "V4": 0.8320987654320986
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7160493827160493,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Apical Junction pathway upregulated or downregulat",
+      "response": "Based on the GSEA results, the Apical Junction pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** based on the significant enrichment score (-2.47, FDR < 0.05).\n\n### Rationale:\nThe Apical Junction pathway is a collection of genes involved in the ",
+      "total_reward": 0.8879967091731797,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.7619909502262443
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6809954751131222,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Apical Junction pathway suppression in mouse thymus under spa",
+      "response": "The Apical Junction pathway is suppressed in mouse thymus under spaceflight conditions, with a 1.4-fold decrease in average expression. This pathway is involved in cell-cell adhesion and junction formation, and its suppression suggests altered cell-cell interactions in the thymus.\n\nThe biological si",
+      "total_reward": 0.6303030303030303,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.3,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Apical Surface pathway upregulated or downregulate",
+      "response": "Based on the GSEA results, the Apical Surface pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.87, FDR q-value = 0.001).\n\n### Explanation:\nThe Apical Surface pathway is a collection of genes involved ",
+      "total_reward": 0.9531911291687827,
+      "verifier_scores": {
+        "V1": 0.9666666666666668,
+        "V4": 0.9296089385474859
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8351955307262571,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Apical Surface pathway suppression in mouse thymus under spac",
+      "response": "Apical Surface pathway suppression in mouse thymus under spaceflight conditions is likely a protective response to maintain immune function in the face of microgravity-induced stress. The Apical Surface pathway is involved in cellular adhesion and polarity, and its suppression may reflect a decrease",
+      "total_reward": 0.6472727272727272,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.25,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Apoptosis pathway upregulated or downregulated bas",
+      "response": "Based on the GSEA results, the Apoptosis pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the Apoptosis pathway has a normalized enrichment score (NES) of -1.58, indicating that genes associated with this pathway are **decreased**",
+      "total_reward": 0.7111759406237934,
+      "verifier_scores": {
+        "V1": 0.5538461538461539,
+        "V4": 0.9865030674846627
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8067484662576687,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Apoptosis pathway suppression in mouse thymus under spaceflig",
+      "response": "Apoptosis is a programmed cell death pathway that plays a critical role in maintaining tissue homeostasis. Suppression of apoptosis in mouse thymus under spaceflight conditions may indicate a compensatory mechanism to maintain thymic function in the face of increased oxidative stress and other space",
+      "total_reward": 0.08181818181818182,
+      "verifier_scores": {
+        "V1": 0.07142857142857144,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7469135802469136,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Bile Acid Metabolism pathway upregulated or downre",
+      "response": "Based on the GSEA results, the Bile Acid Metabolism pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.49, FDR q-value = 0.0001).\n\n### Explanation:\nThe GSEA results show that the Bile Acid Metabolism pa",
+      "total_reward": 0.8654545454545455,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.7000000000000002
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Bile Acid Metabolism pathway suppression in mouse thymus unde",
+      "response": "Bile acid metabolism pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to conserve energy and reduce metabolic stress. Spaceflight is known to induce oxidative stress and metabolic dysregulation, which can lead to cellular damage and dysfunction. By do",
+      "total_reward": 0.7606060606060605,
+      "verifier_scores": {
+        "V1": 0.9666666666666668,
+        "V4": 0.3999999999999999
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Coagulation pathway upregulated or downregulated b",
+      "response": "Based on the gene set enrichment analysis, the Coagulation pathway is **downregulated** in mouse thymus tissue during spaceflight. This is supported by the fact that the pathway has a negative log2 fold change (-0.45) and a low p-value (0.002).\n\n### Confidence Level:\nHigh confidence\n\n### Explanation",
+      "total_reward": 0.9381818181818182,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Coagulation pathway suppression in mouse thymus under spacefl",
+      "response": "The 2.4-fold decrease in C1q expression in mouse thymus under spaceflight conditions is likely a protective response to maintain immune function. C1q is a component of the classical complement pathway, which plays a critical role in immune surveillance and clearance of pathogens. Decreased C1q expre",
+      "total_reward": 0.5211502782931354,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.9081632653061225
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.29591836734693877,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Complement pathway upregulated or downregulated ba",
+      "response": "Based on the GSEA results, the Complement pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.57) and low FDR (0.001).\n\n### Explanation:\nThe GSEA results show that the Complement pathway is significantly",
+      "total_reward": 0.9404833141542002,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.9063291139240506
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7531645569620253,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Complement pathway suppression in mouse thymus under spacefli",
+      "response": "Complement pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive inflammation and tissue damage. The complement system is a key component of the immune response, and its activation can lead to the release of pro-inflammatory cytokines ",
+      "total_reward": 0.6808080808080808,
+      "verifier_scores": {
+        "V1": 0.5555555555555556,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Dna Repair pathway upregulated or downregulated ba",
+      "response": "Based on the gene set enrichment analysis, the Dna Repair pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.53) and the large number of genes in the pathway (115).\n\n### Explanation:\nThe Dna Repair path",
+      "total_reward": 0.1507805325987144,
+      "verifier_scores": {
+        "V1": 0.06666666666666667,
+        "V4": 0.297979797979798
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.601010101010101,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Dna Repair pathway activation in mouse thymus under spaceflig",
+      "response": "DNA repair pathway activation in mouse thymus under spaceflight conditions is likely a protective response to the increased oxidative stress and DNA damage associated with spaceflight. The activation of DNA repair pathways is a well-known response to oxidative stress and DNA damage, and is a key mec",
+      "total_reward": 0.8869450990997952,
+      "verifier_scores": {
+        "V1": 0.9846153846153847,
+        "V4": 0.7160220994475139
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9419889502762431,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the E2F Targets pathway upregulated or downregulated b",
+      "response": "Based on the GSEA results, the E2F Targets pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** based on the significant enrichment score (-2.53, FDR-adjusted p-value = 0.001).\n\n### Explanation:\nThe E2F Targets pathway is a collection of genes that",
+      "total_reward": 0.07641633728590252,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.21014492753623193
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.644927536231884,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of E2F Targets pathway activation in mouse thymus under spacefli",
+      "response": "E2F Targets pathway activation in mouse thymus under spaceflight conditions is likely a compensatory response to stress. E2",
+      "total_reward": 0.6303030303030303,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.1,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Epithelial Mesenchymal Transition pathway upregula",
+      "response": "Based on the GSEA results, the Epithelial Mesenchymal Transition pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the Epithelial Mesenchymal Transition pathway is significantly downregulated in mouse thymus tissue during spaceflig",
+      "total_reward": 0.9320321862694743,
+      "verifier_scores": {
+        "V1": 0.9777777777777779,
+        "V4": 0.8519774011299435
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7259887005649718,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Epithelial Mesenchymal Transition pathway suppression in mous",
+      "response": "The observed changes in gene expression in mouse thymus under spaceflight conditions are likely due to a combination of factors, including microgravity, radiation exposure, and altered circadian rhythms. The suppression of EMT pathways may be a response to the disruption of signaling pathways involv",
+      "total_reward": 0.609090909090909,
+      "verifier_scores": {
+        "V1": 0.9,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.2222222222222222,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Estrogen Response Early pathway upregulated or dow",
+      "response": "Exercise has been shown to improve circadian rhythm and",
+      "total_reward": 0.3727272727272727,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Estrogen Response Early pathway suppression in mouse thymus u",
+      "response": "The suppression of the Estrogen Response Early pathway in mouse thymus under spaceflight conditions is likely a protective mechanism to reduce the proliferative effects of estrogen. Estrogen is known to promote cell proliferation, and in the context of spaceflight, this could lead to increased risk ",
+      "total_reward": 0.8657097288676235,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.6807017543859648
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6403508771929824,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Estrogen Response Late pathway upregulated or down",
+      "response": "Based on gene set enrichment analysis, the Estrogen Response Late pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe table below summarizes the results of gene set enrichment analysis for the Estrogen Response Late pathway in mouse thymus tissue during sp",
+      "total_reward": 0.3333333333333333,
+      "verifier_scores": {
+        "V1": 0.4666666666666667,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7994011976047904,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Estrogen Response Late pathway suppression in mouse thymus un",
+      "response": "The suppression of the Estrogen Response Late (ERL) pathway in mouse thymus under spaceflight conditions is a complex phenomenon that requires further investigation to fully understand its biological significance.\n\nOne potential mechanism for ERL pathway suppression is the disruption of hormonal sig",
+      "total_reward": 0.8336898395721924,
+      "verifier_scores": {
+        "V1": 0.9,
+        "V4": 0.7176470588235295
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9411764705882353,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Fatty Acid Metabolism pathway upregulated or downr",
+      "response": "Based on the GSEA results, the Fatty Acid Metabolism pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.43) and low FDR (0.001).\n\n### Explanation:\nThe Fatty Acid Metabolism pathway is significantly down",
+      "total_reward": 0.8857463524130191,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.7358024691358027
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9320987654320987,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Fatty Acid Metabolism pathway suppression in mouse thymus und",
+      "response": "Fatty acid metabolism pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to conserve energy and reduce oxidative stress. Spaceflight is associated with increased oxidative stress due to radiation exposure and microgravity-induced changes in metabolism. ",
+      "total_reward": 0.8627450980392156,
+      "verifier_scores": {
+        "V1": 0.9777777777777779,
+        "V4": 0.6614379084967321
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6307189542483661,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the G2M Checkpoint pathway upregulated or downregulate",
+      "response": "Based on the GSEA results, the G2M Checkpoint pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the G2M Checkpoint pathway is significantly enriched in the downregulated gene set (NES = -2.08, FDR q-value = 0.001). This indicates t",
+      "total_reward": 0.05757575757575757,
+      "verifier_scores": {
+        "V1": 0.03333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7912621359223301,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of G2M Checkpoint pathway activation in mouse thymus under space",
+      "response": "The G2M Checkpoint pathway is a cell cycle regulatory pathway that controls the transition from G2 to M phase. In mouse thymus, spaceflight conditions lead to activation of this pathway, as indicated by the upregulation of genes such as Cdkn1a, Cdkn2a, and Cdkn2b.\n\nThis activation likely reflects a ",
+      "total_reward": 0.6303030303030303,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.3305084745762712,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Heme Metabolism pathway upregulated or downregulat",
+      "response": "Based on the GSEA results, the Heme Metabolism pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.46, FDR q-value = 0.0001).\n\n### Explanation:\nThe Heme Metabolism pathway is a collection of genes involv",
+      "total_reward": 0.9311802232854864,
+      "verifier_scores": {
+        "V1": 0.9500000000000001,
+        "V4": 0.8982456140350878
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8508771929824561,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Heme Metabolism pathway suppression in mouse thymus under spa",
+      "response": "Heme Metabolism pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to reduce oxidative stress and inflammation. Spaceflight is known to induce oxidative stress and inflammation in various tissues, including the thymus. Heme metabolism is closely linked ",
+      "total_reward": 0.6045454545454546,
+      "verifier_scores": {
+        "V1": 0.55,
+        "V4": 0.7000000000000002
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Hypoxia pathway upregulated or downregulated based",
+      "response": "Based on the GSEA results, the Hypoxia pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the strong statistical significance of the results.\n\n### Explanation:\nThe GSEA results for the Hypoxia pathway in mouse thymus tissue during spacefli",
+      "total_reward": 0.9257342657342658,
+      "verifier_scores": {
+        "V1": 0.9800000000000001,
+        "V4": 0.8307692307692309
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8846153846153846,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Hypoxia pathway suppression in mouse thymus under spaceflight",
+      "response": "Hypoxia pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to conserve energy and resources in response to the stressful environment. The thymus is a critical immune organ that produces T cells, and hypoxia can impair thymic function. By suppressing the",
+      "total_reward": 0.8333721833721832,
+      "verifier_scores": {
+        "V1": 0.9833333333333334,
+        "V4": 0.5709401709401707
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5854700854700854,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Il2 Stat5 Signaling pathway upregulated or downreg",
+      "response": "Based on the GSEA results, the Il2 Stat5 Signaling pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the strong statistical significance of the results.\n\n### Explanation:\nThe Il2 Stat5 Signaling pathway is significantly downregulated in m",
+      "total_reward": 0.8888710583326647,
+      "verifier_scores": {
+        "V1": 0.9818181818181819,
+        "V4": 0.7262135922330097
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9368932038834952,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Il2 Stat5 Signaling pathway suppression in mouse thymus under",
+      "response": "Il2 Stat5 Signaling pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive immune activation. Spaceflight is known to cause oxidative stress and inflammation, which can lead to immune dysfunction. By suppressing Il2 Stat5 Signaling path",
+      "total_reward": 0.870414064307194,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.7603053435114504
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9198473282442748,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Il6 Jak Stat3 Signaling pathway upregulated or dow",
+      "response": "Based on the gene set enrichment analysis, the Tnf Nfkb Signaling pathway is **upregulated** in mouse thymus tissue during spaceflight. This is supported by the following evidence:\n\n- The pathway has a normalized enrichment score (NES) of 1.74, indicating a significant upregulation (p-value < 0.05).",
+      "total_reward": 0.22727272727272724,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8076923076923077,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Il6 Jak Stat3 Signaling pathway suppression in mouse thymus u",
+      "response": "The Il6 Jak Stat3 Signaling pathway is a key regulator of immune function, and its suppression in mouse thymus under spaceflight conditions suggests a potential mechanism for immune system dysfunction in space.\n\nThe Il6 Jak Stat3 Signaling pathway is a key regulator of immune function, and its suppr",
+      "total_reward": 0.984076792772445,
+      "verifier_scores": {
+        "V1": 0.991304347826087,
+        "V4": 0.9714285714285715
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8142857142857143,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Inflammatory Response pathway upregulated or downr",
+      "response": "Based on the GSEA results, the Inflammatory Response pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.83) and the large number of genes in the pathway (118).\n\n### Explanation:\nThe Inflammatory Respons",
+      "total_reward": 0.9381818181818182,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Inflammatory Response pathway suppression in mouse thymus und",
+      "response": "The Inflammatory Response pathway is suppressed in mouse thymus under spaceflight conditions, with a 1.3-fold decrease in average pathway activity. This suppression is biologically significant because the thymus is a critical immune organ that produces T cells, which are essential for immune surveil",
+      "total_reward": 0.9454545454545455,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Interferon Alpha Response pathway upregulated or d",
+      "response": "Based on the gene set enrichment analysis, the Interferon Alpha Response pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.58) and the large number of genes in the pathway (114).\n\n### Explanation:\nThe ",
+      "total_reward": 0.06818181818181818,
+      "verifier_scores": {
+        "V1": 0.05,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Interferon Alpha Response pathway suppression in mouse thymus",
+      "response": "Interferon Alpha Response pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive immune activation. Spaceflight is known to cause oxidative stress and inflammation, which can lead to immune dysfunction. By suppressing the Interferon Alp",
+      "total_reward": 0.6545454545454545,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.25,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Interferon Gamma Response pathway upregulated or d",
+      "response": "Based on the GSEA results, the Interferon Gamma Response pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the Interferon Gamma Response pathway has a normalized enrichment score (NES) of -1.67, indicating a downregulation. The fal",
+      "total_reward": 0.3545454545454545,
+      "verifier_scores": {
+        "V1": 0.5,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7307692307692307,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Interferon Gamma Response pathway suppression in mouse thymus",
+      "response": "Interferon gamma (IFN-\u03b3) is a cytokine that plays a key role in immune system activation and regulation. Its suppression in mouse thymus under spaceflight conditions suggests a potential immune system dysregulation.\n\n**Possible mechanisms:**\n- Spaceflight-induced stress may suppress immune system fu",
+      "total_reward": 0.3545454545454545,
+      "verifier_scores": {
+        "V1": 0.5,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Kras Signaling Dn pathway upregulated or downregul",
+      "response": "Based on the GSEA results, the Kras Signaling Dn pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.95, FDR q-value = 0.001).\n\n### Rationale:\nThe Kras Signaling Dn pathway is a collection of genes that ",
+      "total_reward": 0.9337472283813746,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.8878048780487804
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7439024390243902,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Kras Signaling Dn pathway suppression in mouse thymus under s",
+      "response": "Kras Signaling Dn pathway suppression in mouse thymus under spaceflight conditions is likely a protective response to mitigate the effects of radiation exposure. Spaceflight increases exposure to ionizing radiation, which can cause DNA damage and",
+      "total_reward": 0.6303030303030303,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.21428571428571425,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Kras Signaling Up pathway upregulated or downregul",
+      "response": "Based on the GSEA results, the Kras Signaling Up pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the Kras Signaling Up pathway has a normalized enrichment score (NES) of -1.73, indicating that it is downregulated. The false disco",
+      "total_reward": 0.6772727272727272,
+      "verifier_scores": {
+        "V1": 0.55,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Kras Signaling Up pathway suppression in mouse thymus under s",
+      "response": "Kras Signaling Up pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive proliferation and inflammation. Kras is a key regulator of cell proliferation and differentiation, and its activation has been implicated in various cancers. Under",
+      "total_reward": 0.9010101010101009,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.8444444444444443
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7222222222222222,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Mitotic Spindle pathway upregulated or downregulat",
+      "response": "Based on the GSEA results, the Mitotic Spindle pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.63) and the large number of genes in the pathway (118).\n\n### Rationale:\nThe Mitotic Spindle pathway is a",
+      "total_reward": 0.058551617873651776,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1610169491525424
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6694915254237288,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mitotic Spindle pathway activation in mouse thymus under spac",
+      "response": "The observed changes in the Mitotic Spind",
+      "total_reward": 0.3727272727272727,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Mtorc1 Signaling pathway upregulated or downregula",
+      "response": "Based on the GSEA results, the Mtorc1 Signaling pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n**Confidence level:** High\n\n**Evidence:**\n- GSEA: Mtorc1 Signaling pathway is ranked 1,473rd out of 1,500 pathways (downregulated).\n- Pathway analysis: Mtorc1 Signaling pathway ha",
+      "total_reward": 0.11570247933884295,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.3181818181818181
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5909090909090909,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mtorc1 Signaling pathway activation in mouse thymus under spa",
+      "response": "Mtorc1 Signaling pathway activation in mouse thymus under spaceflight conditions is likely a compensatory response to stress. The thymus is a key immune organ that produces T cells, which are critical for immune function. Spaceflight is known to cause immune suppression, and Mtorc1 activation is a k",
+      "total_reward": 0.8871945259042033,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.7397849462365591
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9301075268817205,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Myc Targets V1 pathway upregulated or downregulate",
+      "response": "Based on the GSEA results, the Myc Targets V1 pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.46, FDR q-value = 0.001).\n\n### Rationale:\nThe GSEA results show that the Myc Targets V1 pathway is signif",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Myc Targets V1 pathway activation in mouse thymus under space",
+      "response": "Spaceflight-induced Myc Targets V1 pathway activation in mouse thymus is a complex phenomenon that likely involves multiple mechanisms. The pathway is known to play a role in cell proliferation, differentiation, and apoptosis, all of which are important processes in the thymus.\n\nOne possible mechani",
+      "total_reward": 0.8464283703912185,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.6476780185758513
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6238390092879257,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Myogenesis pathway upregulated or downregulated ba",
+      "response": "Based on the GSEA results, the Myogenesis pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.81) and the large number of genes in the pathway (113).\n\n### Explanation:\nThe Myogenesis pathway is a set of ",
+      "total_reward": 0.8727272727272728,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.7000000000000002
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Myogenesis pathway suppression in mouse thymus under spacefli",
+      "response": "Myogenesis pathway suppression in mouse thymus under spaceflight conditions is likely a compensatory response to the stress of spaceflight. The thymus is a critical immune organ that produces T cells, and spaceflight is known to cause immune dysfunction. Myogenesis is a process of muscle cell differ",
+      "total_reward": 0.6629370629370629,
+      "verifier_scores": {
+        "V1": 0.9846153846153847,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.3,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Notch Signaling pathway upregulated or downregulat",
+      "response": "Based on the GSEA results, the Notch Signaling pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n**Confidence level:** High\n\n**Evidence:**\n- GSEA: Notch Signaling pathway is significantly downregulated (NES = -1.69, FDR q-value = 0.0002).\n- Pathway analysis: Notch Signaling pa",
+      "total_reward": 0.8924242424242422,
+      "verifier_scores": {
+        "V1": 0.9833333333333334,
+        "V4": 0.7333333333333332
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.6666666666666666,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Notch Signaling pathway suppression in mouse thymus under spa",
+      "response": "The observed changes in cytokine expression in",
+      "total_reward": 0.3727272727272727,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Oxidative Phosphorylation pathway upregulated or d",
+      "response": "Based on the GSEA results, the Oxidative Phosphorylation pathway is **downregulated** in mouse thymus tissue during spaceflight. This is supported by the negative NES (-1.68) and the direction of the pathway enrichment (down).\n\n**Confidence level:** High\n\n### Explanation:\nThe GSEA results show that ",
+      "total_reward": 0.9602397602397602,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.9406593406593406
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8296703296703297,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Oxidative Phosphorylation pathway suppression in mouse thymus",
+      "response": "Oxidative phosphorylation (OXPHOS) is a critical metabolic pathway that generates ATP through the electron transport chain (ETC) in mitochondria. Suppression of OXPHOS in mouse thymus under spaceflight conditions suggests a potential metabolic adaptation to the stressful environment.\n\n**Mechanisms:*",
+      "total_reward": 0.8022727272727272,
+      "verifier_scores": {
+        "V1": 0.9750000000000001,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the P53 Pathway pathway upregulated or downregulated b",
+      "response": "Based on the GSEA results, the P53 Pathway pathway is **downregulated** in mouse thymus tissue during spaceflight.\n\n### Justification:\nThe GSEA results show that the P53 Pathway pathway has a normalized enrichment score (NES) of -1.53, indicating a downregulation. The false discovery rate (FDR) is 0",
+      "total_reward": 0.3545454545454545,
+      "verifier_scores": {
+        "V1": 0.5,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.9201680672268908,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of P53 Pathway pathway suppression in mouse thymus under spacefl",
+      "response": "P53 Pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive apoptosis in response to stress. P53 is a tumor suppressor gene that plays a key role in cell cycle regulation and DNA repair. Under stressful conditions, P53 is activated and i",
+      "total_reward": 0.6808080808080808,
+      "verifier_scores": {
+        "V1": 0.5555555555555556,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Pi3K Akt Mtor Signaling pathway upregulated or dow",
+      "response": "In addition to the Pi3K Akt Mtor Signaling pathway, several other pathways are significantly affected by spaceflight in mouse thymus tissue. These include:\n\n- **Cell cycle**: NES = -1.56, FDR-adjusted p-value = 0.002\n- **Oxidative phosphorylation**: NES = 1.58, FDR-adjusted p-value = 0.002\n- **P53 s",
+      "total_reward": 0.3727272727272727,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Pi3K Akt Mtor Signaling pathway activation in mouse thymus un",
+      "response": "The Pi3K Akt Mtor Signaling pathway is a key regulator of cell growth, proliferation, and survival. In mouse thymus, spaceflight conditions (microgravity, radiation, etc.) may activate this pathway to promote cellular adaptation and survival.\n\nMechanisms that could drive this change include:\n- Incre",
+      "total_reward": 0.3363636363636363,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.3999999999999999
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Spermatogenesis pathway upregulated or downregulat",
+      "response": "Based on the GSEA results, the Spermatogenesis pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the strong statistical significance (FDR q-value < 0.001) and the consistent direction of change across all replicates.\n\n### Rationale:\nThe G",
+      "total_reward": 0.06181818181818183,
+      "verifier_scores": {
+        "V1": 0.04000000000000001,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Spermatogenesis pathway activation in mouse thymus under spac",
+      "response": "Spermatogenesis pathway activation in mouse thymus under spaceflight conditions is likely a compensatory response to stress. The thymus is a key immune organ, and its function is critical for maintaining immune homeostasis. Spaceflight is known to cause oxidative stress, which can damage DNA and dis",
+      "total_reward": 0.918475073313783,
+      "verifier_scores": {
+        "V1": 0.9714285714285715,
+        "V4": 0.8258064516129031
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8870967741935485,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Tgf Beta Signaling pathway upregulated or downregu",
+      "response": "Based on the gene set enrichment analysis, the Tgf Beta Signaling pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** based on the significant enrichment score (-log10(ES) = -2.15).\n\n### Explanation:\nThe Tgf Beta Signaling pathway is a key regulat",
+      "total_reward": 0.9568550368550368,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.9513513513513514
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.8243243243243243,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Tgf Beta Signaling pathway suppression in mouse thymus under ",
+      "response": "TGF-\u03b2 signaling pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to prevent excessive inflammation and tissue damage. Spaceflight is known to induce oxidative stress and inflammation, which can lead to tissue damage and immune dysfunction. By suppress",
+      "total_reward": 0.22727272727272724,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Tnfa Signaling Via Nfkb pathway upregulated or dow",
+      "response": "Based on the GSEA results, the Tnfa Signaling Via Nfkb pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.76) and the large number of genes in the pathway (111).\n\n### Explanation:\nThe Tnfa Signaling Via",
+      "total_reward": 0.34545454545454546,
+      "verifier_scores": {
+        "V1": 0.48571428571428577,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.949438202247191,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Tnfa Signaling Via Nfkb pathway suppression in mouse thymus u",
+      "response": "Tnfa Signaling Via Nfkb pathway suppression in mouse kidney under spaceflight conditions is likely a",
+      "total_reward": 0.6409090909090909,
+      "verifier_scores": {
+        "V1": 0.9500000000000001,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.1,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Uv Response Dn pathway upregulated or downregulate",
+      "response": "Based on the GSEA results, the Uv Response Dn pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.58) and low FDR (0.001).\n\n### Explanation:\nThe Uv Response Dn pathway is a set of genes that are downregu",
+      "total_reward": 0.6666666666666666,
+      "verifier_scores": {
+        "V1": 0.5333333333333333,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Uv Response Dn pathway suppression in mouse thymus under spac",
+      "response": "Uv Response Dn pathway suppression in mouse thymus under spaceflight conditions is likely a protective response to mitigate the harmful effects of UV radiation exposure. UV radiation is a known risk factor for skin cancer, and the thymus is particularly vulnerable to radiation damage due to its high",
+      "total_reward": 0.9771791994014215,
+      "verifier_scores": {
+        "V1": 0.9777777777777779,
+        "V4": 0.9761316872427983
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7880658436213992,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse thymus tissue during spaceflight, is the Xenobiotic Metabolism pathway upregulated or downr",
+      "response": "Based on the gene set enrichment analysis, the Xenobiotic Metabolism pathway is **downregulated** in mouse thymus tissue during spaceflight. The confidence level is **high** based on the significant enrichment score (-log10(ES) = -1.57).\n\n### Rationale:\nThe Xenobiotic Metabolism pathway is a collect",
+      "total_reward": 0.22727272727272724,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Xenobiotic Metabolism pathway suppression in mouse thymus und",
+      "response": "Xenobiotic metabolism pathway suppression in mouse thymus under spaceflight conditions is likely a protective mechanism to reduce oxidative stress and inflammation. Spaceflight is known to induce oxidative stress and inflammation in various tissues, including the thymus. Xenobiotic metabolism pathwa",
+      "total_reward": 0.7563636363636362,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.3999999999999999
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Cholesterol Homeostasis pathway consistently activated or suppressed in mouse thymus across d",
+      "response": "The Cholesterol Homeostasis pathway is consistently activated in mouse thymus across different spaceflight missions. The direction of change is highly confident, with a p-value of 0.0001.\n\n### Justification:\nThe Cholesterol Homeostasis pathway is significantly activated in mouse thymus across differ",
+      "total_reward": 0.12000000000000002,
+      "verifier_scores": {
+        "V4": 0.12000000000000002
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Is the Mtorc1 Signaling pathway consistently activated or suppressed in mouse thymus across differen",
+      "response": "The Mtorc1 Signaling pathway is consistently activated in mouse thymus across different spaceflight missions. The direction of change is confident.\n\n### Evidence:\n- Mtorc1 Signaling pathway is activated in mouse thymus across different spaceflight missions:\n  - Shen et al., 2017: 1.2-fold increase i",
+      "total_reward": 0.8245614035087719,
+      "verifier_scores": {
+        "V4": 0.8245614035087719
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.7192982456140351,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Myc Targets V2 pathway consistently activated or suppressed in mouse thymus across different ",
+      "response": "The Myc Targets V2 pathway is consistently activated in mouse thymus across different spaceflight missions. The pathway is significantly upregulated in all three missions (S1: 1.5-fold, S2: 2.3-fold, S3: 2.1-fold), with a combined p-value of 1.1e-10. The direction of change is highly significant, wi",
+      "total_reward": 0.040000000000000036,
+      "verifier_scores": {
+        "V4": 0.040000000000000036
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Oxidative Phosphorylation pathway consistently activated or suppressed in mouse thymus across",
+      "response": "The Oxidative Phosphorylation pathway is consistently activated in mouse thymus across different spaceflight missions. The direction of change is highly confident, with a p-value of 0.0001.\n\n### Justification:\nThe Oxidative Phosphorylation pathway is significantly activated in mouse thymus across al",
+      "total_reward": 0.12000000000000002,
+      "verifier_scores": {
+        "V4": 0.12000000000000002
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Is the Peroxisome pathway consistently activated or suppressed in mouse thymus across different spac",
+      "response": "The Peroxisome pathway is consistently activated in mouse thymus across different spaceflight missions. The direction of change is highly confident, with a p-value of 0.0001 and a fold change of 1.78. This indicates that the pathway is significantly activated in response to spaceflight, and that thi",
+      "total_reward": 0.12000000000000002,
+      "verifier_scores": {
+        "V4": 0.12000000000000002
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Adipogenesis pathway upregulated or downregulated bas",
+      "response": "Based on the GSEA results, the Adipogenesis pathway is **downregulated** in mouse eye tissue during spaceflight.\n\n### Explanation:\nThe Adipogenesis pathway is represented by the following genes:\n- Cebp\u03b1\n- Pparg\n- Fabp4\n- Adipoq\n- Cd36\n- Pck1\n- Ppara\n- Ppard\n\nThe GSEA results show that this gene set ",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Adipogenesis pathway activation in mouse eye under spacefligh",
+      "response": "Adipogenesis pathway activation in mouse eye under spaceflight conditions is likely a compensatory response to metabolic stress. Spaceflight is known to induce metabolic changes, including reduced food intake and altered circadian rhythms, which can lead to energy imbalance and metabolic dysregulati",
+      "total_reward": 0.6409090909090909,
+      "verifier_scores": {
+        "V1": 0.9500000000000001,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.25,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Fatty Acid Metabolism pathway upregulated or downregu",
+      "response": "Based on the GSEA results, the Fatty Acid Metabolism pathway is **downregulated** in mouse eye tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.48) and the large number of genes in the pathway (115).\n\n### Rationale:\nThe GSEA results show that th",
+      "total_reward": 0.05757575757575757,
+      "verifier_scores": {
+        "V1": 0.03333333333333333,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Fatty Acid Metabolism pathway activation in mouse eye under s",
+      "response": "Fatty acid metabolism pathway activation in mouse eye under spaceflight conditions is likely a compensatory response to mitochondrial dysfunction and oxidative stress. Spaceflight is known to cause mitochondrial dysfunction, leading to reduced ATP production and increased reactive oxygen species (RO",
+      "total_reward": 0.5983827034388831,
+      "verifier_scores": {
+        "V1": 0.5833333333333334,
+        "V4": 0.6247191011235953
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.6123595505617977,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Mitotic Spindle pathway upregulated or downregulated ",
+      "response": "Based on the GSEA results, the Mitotic Spindle pathway is **downregulated** in mouse eye tissue during spaceflight. This is supported by the negative NES (-1.47) and the downward trend in the pathway's normalized enrichment score (NES).\n\n**Confidence level:** High\n\n### Explanation:\n\n- **GSEA results",
+      "total_reward": 0.9384361093452003,
+      "verifier_scores": {
+        "V1": 0.9600000000000001,
+        "V4": 0.9006993006993007
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.8496503496503497,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mitotic Spindle pathway suppression in mouse eye under spacef",
+      "response": "The 1.35-fold change in Mitotic Spindle pathway suppression suggests that spaceflight may induce cell cycle arrest or apoptosis in ocular tissues. This could be due to increased oxidative stress, DNA damage, or other spaceflight-induced stressors that disrupt cellular processes.\n\nWhile the direction",
+      "total_reward": 0.3363636363636363,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.3999999999999999
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Mtorc1 Signaling pathway upregulated or downregulated",
+      "response": "Based on the GSEA results, the Mtorc1 Signaling pathway is **downregulated** in mouse eye tissue during spaceflight. This is supported by the negative NES (-1.44) and the downward trend in the pathway scores (from 0.49 to 0.33).\n\n**Confidence level:** High\n\n### Explanation:\n\n- **GSEA results:** The ",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.7512562814070352,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Mtorc1 Signaling pathway activation in mouse eye under spacef",
+      "response": "Mtorc1 Signaling pathway activation in mouse eye under spaceflight conditions is likely a protective response to mitigate the effects of microgravity on ocular tissues. Microgravity is known to cause fluid shifts and changes in tissue mechanics, which can lead to edema and other pathologies. Activat",
+      "total_reward": 0.8054545454545454,
+      "verifier_scores": {
+        "V1": 0.9800000000000001,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.55,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Myc Targets V1 pathway upregulated or downregulated b",
+      "response": "Based on the GSEA results, the Myc Targets V1 pathway is **downregulated** in mouse eye tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.35) and the large number of genes in the pathway (1,103).\n\n### Rationale:\nThe GSEA results show that the Myc",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.7678571428571428,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Myc Targets V1 pathway activation in mouse eye under spacefli",
+      "response": "The Myc Targets V1 pathway is a key regulator of cell proliferation and differentiation, and its activation in mouse eye under spaceflight conditions suggests that spaceflight may induce cellular stress and proliferative responses in the eye.\n\nThe Myc Targets V1 pathway is a collection of genes that",
+      "total_reward": 0.6611570247933883,
+      "verifier_scores": {
+        "V1": 0.9818181818181819,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.3,
+      "confidence_stated": "low"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Oxidative Phosphorylation pathway upregulated or down",
+      "response": "Based on the GSEA results, the Oxidative Phosphorylation pathway is **downregulated** in mouse eye tissue during spaceflight. This is supported by the negative NES (-1.56) and the direction of the pathway enrichment (down).\n\n**Confidence level:** High\n\n### Rationale:\nThe Oxidative Phosphorylation pa",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.8317535545023698,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Oxidative Phosphorylation pathway activation in mouse eye und",
+      "response": "Oxidative phosphorylation (OXPHOS) is a critical metabolic pathway that generates ATP through the electron transport chain (ETC). Activation of OXPHOS in mouse eye under spaceflight conditions suggests increased energy demand in the eye tissue. This could be due to various factors, including:\n\n1. **",
+      "total_reward": 0.9212121212121211,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.9000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Peroxisome pathway upregulated or downregulated based",
+      "response": "Based on the GSEA results, the Peroxisome pathway is **downregulated** in mouse eye tissue during spaceflight. The confidence level is **high** due to the significant enrichment score (-2.68) and the large number of genes in the pathway (108).\n\n### Rationale:\nThe Peroxisome pathway is a collection o",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.8246753246753247,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Peroxisome pathway activation in mouse eye under spaceflight ",
+      "response": "Peroxisome pathway activation in mouse eye under spaceflight conditions is likely a protective response to oxidative stress. Spaceflight is known to increase oxidative stress in tissues, and peroxisomes are important for detoxifying reactive oxygen species (ROS). The activation of peroxisome pathway",
+      "total_reward": 0.9719320868257038,
+      "verifier_scores": {
+        "V1": 0.9777777777777779,
+        "V4": 0.9617021276595743
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.8191489361702129,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Reactive Oxygen Species Pathway pathway upregulated o",
+      "response": "Based on the gene set enrichment analysis, the Reactive Oxygen Species Pathway pathway is **downregulated** in mouse eye tissue during spaceflight. The confidence level is **high** based on the significant enrichment score (-log10(p-value) = 3.1).\n\n### Explanation:\nThe Reactive Oxygen Species Pathwa",
+      "total_reward": 0.07269203664552501,
+      "verifier_scores": {
+        "V1": 0.05,
+        "V4": 0.11240310077519378
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.6937984496124031,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Reactive Oxygen Species Pathway pathway activation in mouse e",
+      "response": "TGF-beta signaling is a key regulator of cellular processes, including proliferation, differentiation, and apoptosis. Under spaceflight conditions, TGF-beta pathway activation in mouse eye may be driven by several mechanisms:\n\n1. **Microgravity-induced stress**: Spaceflight causes a range of stresso",
+      "total_reward": 0.3727272727272727,
+      "verifier_scores": {
+        "V1": 0.3,
+        "V4": 0.5
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Uv Response Up pathway upregulated or downregulated b",
+      "response": "Based on the GSEA results, the Uv Response Up pathway is **downregulated** in mouse eye tissue during spaceflight.\n\n### Evidence:\n- GSEA results:\n  - Uv Response Up pathway: Normalized Enrichment Score (NES) = -1.57, FDR q-value = 0.001\n  - Uv Response Down pathway: NES = 1.63, FDR q-value = 0.001\n-",
+      "total_reward": 0.3333333333333333,
+      "verifier_scores": {
+        "V1": 0.4666666666666667,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Explain the biological significance of Uv Response Up pathway activation in mouse eye under spacefli",
+      "response": "The Uv Response Up pathway is activated in mouse eye under spaceflight conditions, indicating a potential protective response to increased UV exposure. This pathway includes genes involved in DNA repair and cell cycle regulation, suggesting that cells are attempting to repair UV-induced damage and m",
+      "total_reward": 0.6978354978354978,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.2857142857142857
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.4428571428571429,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "In mouse eye tissue during spaceflight, is the Xenobiotic Metabolism pathway upregulated or downregu",
+      "response": "Based on the GSEA results, the Xenobiotic Metabolism pathway is **downregulated** in mouse eye tissue during spaceflight. The confidence level is **high** due to the strong statistical significance of the results.",
+      "total_reward": 0.03636363636363637,
+      "verifier_scores": {
+        "V1": 0.0,
+        "V4": 0.1
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Explain the biological significance of Xenobiotic Metabolism pathway activation in mouse eye under s",
+      "response": "The Xenobiotic Metabolism pathway is activated in mouse eye under spaceflight conditions, with a 1.5-fold increase in gene expression. This pathway is responsible for metabolizing foreign compounds, including drugs and environmental toxins.\n\nThe activation of this pathway in mouse eye under spacefli",
+      "total_reward": 0.905944945639602,
+      "verifier_scores": {
+        "V1": 0.9333333333333333,
+        "V4": 0.8580152671755725
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.7290076335877863,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the E2F Targets pathway consistently activated or suppressed in mouse eye across different spacef",
+      "response": "The E2F Targets pathway is consistently activated in mouse eye across different spaceflight missions. The direction of change is highly confident, with a p-value of 0.0001. This indicates that the pathway is significantly activated in mouse eye during spaceflight, and that this effect is consistent ",
+      "total_reward": 0.12000000000000002,
+      "verifier_scores": {
+        "V4": 0.12000000000000002
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Is the Interferon Alpha Response pathway consistently activated or suppressed in mouse eye across di",
+      "response": "The Interferon Alpha Response pathway is consistently activated in mouse eye across different spaceflight missions. The direction of change is confident.\n\n### Evidence:\n- Mouse eye: Interferon Alpha Response pathway is activated in all spaceflight missions (upregulated in 3/3 missions, p-value < 0.0",
+      "total_reward": 0.040000000000000036,
+      "verifier_scores": {
+        "V4": 0.040000000000000036
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.95,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "Is the Interferon Gamma Response pathway consistently activated or suppressed in mouse eye across di",
+      "response": "The Interferon Gamma Response pathway is consistently activated in mouse eye across different spaceflight missions. The direction of change is highly confident, with a p-value of 0.0001.\n\n### Justification:\nThe Interferon Gamma Response pathway is significantly activated in mouse eye across all spac",
+      "total_reward": 0.12000000000000002,
+      "verifier_scores": {
+        "V4": 0.12000000000000002
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.85,
+      "confidence_stated": "high"
+    },
+    {
+      "prompt": "Is the Myogenesis pathway consistently activated or suppressed in mouse eye across different spacefl",
+      "response": "The Myogenesis pathway is consistently activated in mouse eye across different spaceflight missions. The pathway is significantly upregulated in all three missions (S1: 1.4-fold, S2: 1.6-fold, S3: 1.7-fold), with a combined p-value of 1.1e-05. This indicates a robust and consistent activation of the",
+      "total_reward": 0.05625,
+      "verifier_scores": {
+        "V4": 0.05625
+      },
+      "question_type": "uncertainty",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.9296875,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "How conserved are pathway-level responses to spaceflight across different missions in mouse thymus? ",
+      "response": "Pathway-level responses to spaceflight are highly conserved across different missions in mouse thymus. The enrichment patterns are reproducible, with similar pathways being significantly enriched in multiple missions.\n\n### Evidence:\n- **Conservation of pathway-level responses:**\n  - **Spaceflight vs",
+      "total_reward": 0.8,
+      "verifier_scores": {
+        "V2": 1.0,
+        "V4": 0.5000000000000001
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "thymus",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    },
+    {
+      "prompt": "How conserved are pathway-level responses to spaceflight across different missions in mouse eye? Are",
+      "response": "Pathway-level responses to spaceflight are highly conserved across different missions in mouse eye. The enrichment patterns are reproducible, with many of the same pathways appearing in multiple missions.\n\n### Evidence:\n- **Conservation of pathway-level responses:**\n  - **Spaceflight vs. Control (S0",
+      "total_reward": 1.0,
+      "verifier_scores": {
+        "V2": 1.0,
+        "V4": 1.0
+      },
+      "question_type": "direction",
+      "source": "genelab",
+      "tissue": "eye",
+      "confidence": 0.5,
+      "confidence_stated": "medium"
+    }
+  ]
+}

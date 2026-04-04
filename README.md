@@ -13,23 +13,27 @@
 
 - **Three-stage training pipeline**: SFT → DPO → GRPO with verifier-based rewards
 - **Multi-reward GRPO**: Four composable verifiers (factual, pathway, consistency, uncertainty) with configurable weights
-- **+19% reward improvement** over SFT baseline using GRPO (0.650 vs 0.547)
-- **-70% calibration error**: ECE reduced from 0.258 to 0.078 after GRPO
+- **+32% reward improvement** over SFT baseline using GRPO with V4-dominant calibration pressure
+- **-62% calibration error**: ECE reduced from 0.478 to 0.183 after GRPO (Phase 4)
 - **90% accuracy** on domain-specific biological reasoning tasks (SFT stage)
 - **Learns from 363 examples** — efficient domain adaptation from spaceflight transcriptomics data
+- **Pre-trained models**: [SFT](https://huggingface.co/jang1563/biorlhf-sft-mistral-7b) and [GRPO](https://huggingface.co/jang1563/biorlhf-grpo-mistral-7b) adapters on HuggingFace
 
 ## Key Results
 
-### GRPO Training (Phase 3)
+### GRPO Training Results
 
-| Metric | SFT Baseline | After GRPO | Improvement |
-|--------|-------------|------------|-------------|
-| Avg Reward | 0.547 | 0.650 | +19% |
-| ECE (Calibration Error) | 0.258 | 0.078 | -70% |
+| Phase | Verifiers | G | Reward | ECE | Key Finding |
+|-------|-----------|---|--------|-----|-------------|
+| MVE | V1+V4 | 4 | 0.650 | 0.078 | Proof-of-concept, best ECE |
+| Full v2 | V1-V4 (equal) | 16 | 0.691 | 0.172 | Best absolute reward, zero-variance <5% |
+| Phase 4 (Legacy) | V1-V4 (V4=0.45) | 16 | 0.566 | 0.183 | Best calibration with full verifiers |
 
-**GRPO Configuration (Full v2):**
+> SFT baselines differ between eval runs due to evaluation methodology updates. Absolute metrics (reward, ECE) are directly comparable across phases.
+
+**GRPO Configuration (Phase 4 — recommended):**
 - 16 generations per prompt (G=16) for robust advantage estimation
-- Multi-reward: V1 (factual, 0.35) + V2 (pathway, 0.30) + V3 (consistency, 0.15) + V4 (uncertainty, 0.20)
+- Multi-reward: V1 (factual, 0.30) + V2 (pathway, 0.15) + V3 (consistency, 0.10) + V4 (uncertainty, **0.45**)
 - KL penalty beta=0.02, 2 iterations per batch, group-normalized rewards
 
 ### Model Comparison (SFT, 20-question evaluation)
@@ -71,6 +75,13 @@ pip install -e ".[dev]"
 - NVIDIA GPU with 48GB+ VRAM recommended (A40 or A100)
 - 24GB+ VRAM sufficient for SFT/DPO with 4-bit quantization
 - CUDA 12.1+ recommended
+
+## Pre-trained Models
+
+| Model | HuggingFace | Description |
+|-------|-------------|-------------|
+| SFT | [biorlhf-sft-mistral-7b](https://huggingface.co/jang1563/biorlhf-sft-mistral-7b) | LoRA adapter, 90% accuracy |
+| GRPO | [biorlhf-grpo-mistral-7b](https://huggingface.co/jang1563/biorlhf-grpo-mistral-7b) | GRPO fine-tuned, ECE 0.183 |
 
 ## Quick Start
 
@@ -174,10 +185,10 @@ Mistral-7B-v0.3                 SFT model                   SFT model (merged)
 
 | Verifier | Name | Weight | What It Scores |
 |----------|------|--------|----------------|
-| **V1** | Factual | 0.35 | Exact match of biological facts (DEG counts, tissue names, directions) |
-| **V2** | Pathway | 0.30 | Correct pathway/gene set enrichment references (Hallmark, KEGG) |
-| **V3** | Consistency | 0.15 | Internal logical consistency within the response |
-| **V4** | Uncertainty | 0.20 | Appropriate confidence calibration and epistemic humility |
+| **V1** | Factual | 0.30 | Exact match of biological facts (DEG counts, tissue names, directions) |
+| **V2** | Pathway | 0.15 | Correct pathway/gene set enrichment references (Hallmark, KEGG) |
+| **V3** | Consistency | 0.10 | Internal logical consistency within the response |
+| **V4** | Uncertainty | **0.45** | Appropriate confidence calibration and epistemic humility |
 
 The verifiers are composable via `RewardComposer` and can be individually weighted:
 
@@ -186,7 +197,7 @@ from biorlhf.verifiers import RewardComposer
 
 composer = RewardComposer(
     active_verifiers=["V1", "V2", "V3", "V4"],
-    weights={"V1": 0.35, "V2": 0.30, "V3": 0.15, "V4": 0.20},
+    weights={"V1": 0.30, "V2": 0.15, "V3": 0.10, "V4": 0.45},
 )
 
 reward = composer.score(question, response, ground_truth)
@@ -245,7 +256,9 @@ BioRLHF/
 │   └── cli.py                # Command-line interface
 ├── configs/                  # Training configurations
 │   ├── grpo_mve.json         #   Minimum viable experiment
-│   └── grpo_full_v2.json     #   Full multi-reward training
+│   ├── grpo_full_v2.json     #   Full multi-reward training
+│   ├── grpo_phase4.json      #   Phase 4 V4-dominant config
+│   └── grpo_phase4_ablation_*.json  #   Phase 4 ablation configs
 ├── data/                     # Training datasets
 │   ├── kmp_sft_final.json    #   363 SFT training examples
 │   └── kmp_test_set.json     #   20-question evaluation set
@@ -259,8 +272,8 @@ BioRLHF/
 
 ### 1. Verifier-Based GRPO Improves Calibration
 
-- GRPO with V1-V4 verifiers reduced calibration error (ECE) by 70%
-- Multi-reward composition outperforms single-reward training
+- GRPO with V1-V4 verifiers reduced calibration error (ECE) by up to 62%
+- V4-dominant weighting (0.45) provides strongest calibration pressure
 - G=16 generations dramatically reduces zero-variance batches (from 50% to <5%)
 
 ### 2. Fact Drilling Works for SFT

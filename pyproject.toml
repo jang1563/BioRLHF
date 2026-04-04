@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "BioRLHF"
-version = "0.2.0"
+version = "0.3.0"
 description = "Biological Reinforcement Learning from Human Feedback - Fine-tuning LLMs for biological reasoning with verifier-based GRPO and calibrated uncertainty"
 readme = "README.md"
 license = "MIT"

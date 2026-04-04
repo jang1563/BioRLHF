@@ -5,6 +5,27 @@ All notable changes to BioRLHF will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-04-04
+
+### Added
+- Phase 4 GRPO ablation experiments (legacy vs match_v1 V4 modes)
+- V4 verifier V1-aware calibration mode (`_score_calibration_aware`)
+- Environment variable `BIORLHF_V4_DEFAULT_MODE` for V4 scoring mode
+- Ablation training configs for Phase 4
+- HuggingFace model uploads: SFT and GRPO adapters
+
+### Changed
+- V4 verifier weight increased to 0.45 (dominant) for calibration pressure
+- Updated README with multi-phase GRPO results and HF model links
+- Sanitized HPC paths in all scripts — now use env vars (`BIORLHF_SCRATCH`, `BIORLHF_CONDA_SH`)
+- Added `generate_response` to public API exports
+- Fixed `source ~/.bashrc` in setup script (doesn't work non-interactively)
+
+### Training Results
+- **Legacy ablation**: Reward 0.566, ECE 0.183 (best calibration with full verifiers)
+- **MatchV1 ablation**: Reward 0.523, ECE 0.242
+- Legacy mode outperforms match_v1 on all metrics
+
 ## [0.2.0] - 2026-03-22
 
 ### Added
@@ -90,8 +111,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 0.3.0 | 2026-04-04 | Phase 4 ablation, HF models, sanitized HPC paths |
 | 0.2.0 | 2026-03-22 | GRPO pipeline, V1-V4 verifiers, multi-reward training |
 | 0.1.0 | 2025-01-09 | Initial release with SFT/DPO pipelines |
 
+[0.3.0]: https://github.com/jang1563/BioRLHF/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/jang1563/BioRLHF/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jang1563/BioRLHF/releases/tag/v0.1.0

@@ -6,9 +6,9 @@
 
 set -e
 
-REMOTE="cayuga-login1"
-SCRATCH="/athena/cayuga_0003/scratch/users/jak4013/otsuka"
-LOCAL_BASE="$HOME/Dropbox/Bioinformatics/Claude"
+REMOTE="${BIORLHF_HPC_HOST:-your-hpc-login-node}"
+SCRATCH="${BIORLHF_SCRATCH:?Set BIORLHF_SCRATCH to your scratch directory}"
+LOCAL_BASE="${BIORLHF_LOCAL_BASE:-$HOME/BioRLHF-data}"
 
 echo "============================================================"
 echo "BioRLHF Cayuga Deployment"

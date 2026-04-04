@@ -4,7 +4,7 @@
 # Run once to verify/upgrade GRPO dependencies
 # ============================================================
 
-SCRATCH="/athena/cayuga_0003/scratch/users/jak4013/otsuka"
+SCRATCH="${BIORLHF_SCRATCH:?Set BIORLHF_SCRATCH to your scratch directory}"
 WORKDIR="${SCRATCH}/training/BioRLHF"
 
 echo "============================================================"
@@ -15,7 +15,7 @@ echo "============================================================"
 cd "$WORKDIR" || { echo "WORKDIR not found: $WORKDIR"; exit 1; }
 
 # Activate environment
-source ~/.bashrc
+. "${BIORLHF_CONDA_SH:?Set BIORLHF_CONDA_SH to your conda.sh path}"
 conda activate biorlhf
 
 # Step 1: Check current versions

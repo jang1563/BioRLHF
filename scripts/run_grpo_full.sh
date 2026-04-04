@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=biogrpo_full
-#SBATCH --partition=scu-gpu
-#SBATCH --account=cayuga_0003
+#SBATCH --partition=your_partition  # CONFIGURE: your GPU partition
+#SBATCH --account=your_account      # CONFIGURE: your SLURM account
 #SBATCH --gres=gpu:1
 #SBATCH --mem=96G
 #SBATCH --cpus-per-task=8
@@ -14,7 +14,7 @@
 # All V1-V4 verifiers, G=16, multi-reward, from SFT checkpoint
 # ============================================================
 
-SCRATCH="/athena/cayuga_0003/scratch/users/jak4013/otsuka"
+SCRATCH="${BIORLHF_SCRATCH:?Set BIORLHF_SCRATCH to your scratch directory}"
 WORKDIR="${SCRATCH}/training/BioRLHF"
 
 echo "============================================================"
@@ -31,7 +31,7 @@ mkdir -p logs
 module purge
 module load cuda/12.1
 
-. /home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh
+. "${BIORLHF_CONDA_SH:?Set BIORLHF_CONDA_SH to your conda.sh path}"
 conda activate biorlhf
 
 echo ""

@@ -1,15 +1,32 @@
-# BioRLHF Training on Cayuga HPC
+# BioRLHF Training on HPC
 
-**Cluster:** Cornell Cayuga HPC
 **Target:** GPU training with Mistral-7B + LoRA (SFT, DPO, GRPO)
+
+---
+
+## Configuration
+
+Before using the scripts, set these environment variables (e.g., in your `.bashrc` or SLURM job preamble):
+
+```bash
+# Required
+export BIORLHF_SCRATCH="/path/to/your/scratch/directory"
+export BIORLHF_CONDA_SH="/path/to/your/conda.sh"
+
+# Optional (for deploy_to_cayuga.sh)
+export BIORLHF_HPC_HOST="your-hpc-login-node"
+export BIORLHF_LOCAL_BASE="$HOME/BioRLHF-data"
+```
+
+Also update `#SBATCH --partition` and `#SBATCH --account` in the SLURM scripts to match your cluster.
 
 ---
 
 ## Quick Start
 
 ```bash
-# 1. SSH to Cayuga
-ssh jak4013@cayuga-login1
+# 1. SSH to your HPC
+ssh $USER@your-hpc-login-node
 
 # 2. Submit a GRPO training job
 bash -l -c 'sbatch scripts/run_grpo_full.sh'
@@ -23,12 +40,12 @@ tail -f logs/grpo_full_*.log
 
 ## Step 1: Transfer Files to HPC
 
-From your local Mac:
+From your local machine:
 
 ```bash
 rsync -avz --progress \
-    /Users/jak4013/Dropbox/Bioinformatics/Claude/BioRLHF/biorlhf/ \
-    jak4013@cayuga-login1:/athena/cayuga_0003/scratch/users/jak4013/otsuka/training/BioRLHF/
+    /path/to/BioRLHF/biorlhf/ \
+    $USER@your-hpc-login-node:$BIORLHF_SCRATCH/training/BioRLHF/
 ```
 
 ---
@@ -36,11 +53,11 @@ rsync -avz --progress \
 ## Step 2: Set Up Conda Environment (First Time Only)
 
 ```bash
-# SSH to Cayuga
-ssh jak4013@cayuga-login1
+# SSH to your HPC
+ssh $USER@your-hpc-login-node
 
 # Source conda (non-interactive shell requires explicit sourcing)
-. /home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh
+. $BIORLHF_CONDA_SH
 
 # Create environment
 conda create -n biorlhf python=3.10 -y
@@ -73,37 +90,37 @@ bash -l -c 'sbatch scripts/run_grpo_full.sh'
 
 **Key config** (`configs/grpo_full_v2.json`):
 - G=16 generations per prompt
-- V1-V4 verifiers with weights [0.35, 0.30, 0.15, 0.20]
+- V1-V4 verifiers with weights [0.30, 0.15, 0.10, 0.45]
 - beta=0.02, 2 iterations per batch
 - ~48h on A40
 
 ### Option B: SFT Training
 
 ```bash
-# Interactive session
-srun -p scu-gpu --gres=gpu:1 --mem=48G -c 8 --time=4:00:00 --account=cayuga_0003 --pty bash
+# Interactive session (update partition/account for your cluster)
+srun -p your_partition --gres=gpu:1 --mem=48G -c 8 --time=4:00:00 --account=your_account --pty bash
 
 # Activate environment
-. /home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh
+. $BIORLHF_CONDA_SH
 conda activate biorlhf
 
 # Run SFT
-cd /athena/cayuga_0003/scratch/users/jak4013/otsuka/training/BioRLHF
+cd $BIORLHF_SCRATCH/training/BioRLHF
 biorlhf-train --model mistralai/Mistral-7B-v0.3 --dataset data/kmp_sft_final.json --output ./my_sft_model
 ```
 
 ### Option C: Interactive GPU Session
 
 ```bash
-# Request GPU
-srun -p scu-gpu --gres=gpu:1 --mem=48G -c 8 --time=4:00:00 --account=cayuga_0003 --pty bash
+# Request GPU (update partition/account for your cluster)
+srun -p your_partition --gres=gpu:1 --mem=48G -c 8 --time=4:00:00 --account=your_account --pty bash
 
 # Activate environment
-. /home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh
+. $BIORLHF_CONDA_SH
 conda activate biorlhf
 
 # Navigate and run
-cd /athena/cayuga_0003/scratch/users/jak4013/otsuka/training/BioRLHF
+cd $BIORLHF_SCRATCH/training/BioRLHF
 biorlhf-grpo --config configs/grpo_full_v2.json
 ```
 
@@ -121,8 +138,8 @@ tail -f logs/grpo_full_*.log
 # GPU usage (on compute node)
 nvidia-smi
 
-# WandB dashboard
-# https://wandb.ai/jangkeun-weill-cornell-medicine/biogrpo
+# WandB dashboard (if configured)
+# https://wandb.ai/your-workspace/biogrpo
 ```
 
 ---
@@ -139,7 +156,7 @@ nvidia-smi
 
 ---
 
-## GPU Options on Cayuga
+## GPU Options
 
 | GPU | VRAM | Best For | SLURM Flag |
 |-----|------|----------|------------|
@@ -152,23 +169,19 @@ nvidia-smi
 
 ### SLURM Version
 
-The default `sbatch` at `/usr/bin/sbatch` is outdated (v22.05.2). Use `bash -l -c 'sbatch ...'` to get the correct version (slurm/25.05.0) loaded via module.
+Some clusters have an outdated default `sbatch`. Use `bash -l -c 'sbatch ...'` to ensure modules are loaded and the correct SLURM version is used.
 
 ### Conda in Non-Interactive Shells
 
 `source ~/.bashrc` does not work in non-interactive SSH. Always source conda directly:
 ```bash
-. /home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh
+. $BIORLHF_CONDA_SH
 conda activate biorlhf
 ```
 
 ### SFT Checkpoint Symlink
 
-The SFT model adapter is stored at:
-```
-/athena/cayuga_0003/scratch/users/jak4013/otsuka/training/biorlhf/kmp_sft_model_final
-```
-GRPO scripts auto-symlink this into the working directory.
+The SFT model adapter should be available at `$BIORLHF_SCRATCH/training/biorlhf/kmp_sft_model_final`. GRPO scripts auto-symlink this into the working directory.
 
 ### Batch Size with G=16
 
@@ -214,7 +227,7 @@ model = model.merge_and_unload()  # Merge for GRPO training
 
 | Path | Description |
 |------|-------------|
-| `/athena/cayuga_0003/scratch/users/jak4013/otsuka/training/BioRLHF/` | Working directory |
-| `/athena/cayuga_0003/scratch/users/jak4013/otsuka/training/biorlhf/kmp_sft_model_final` | SFT checkpoint |
-| `/athena/cayuga_0003/scratch/users/jak4013/otsuka/data/` | Data directory |
-| `/home/fs01/jak4013/miniconda3/miniconda3/etc/profile.d/conda.sh` | Conda init script |
+| `$BIORLHF_SCRATCH/training/BioRLHF/` | Working directory |
+| `$BIORLHF_SCRATCH/training/biorlhf/kmp_sft_model_final` | SFT checkpoint |
+| `$BIORLHF_SCRATCH/data/` | Data directory |
+| `$BIORLHF_CONDA_SH` | Conda init script |

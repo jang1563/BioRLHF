@@ -189,9 +189,7 @@ logs/
 
 # BioGRPO / ecosystem model outputs
 ecosystem_improved_model/
-biogrpo_mve_model/
-biogrpo_full_model/
-biogrpo_full_v2_model/
+biogrpo_*/
 data/*.json
 
 # Claude workspace
