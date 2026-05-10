@@ -7,7 +7,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Biological Reinforcement Learning from Human Feedback** — A framework for fine-tuning LLMs on biological reasoning tasks using SFT, DPO, and GRPO with verifier-based reward models for factual accuracy, calibrated uncertainty, and chain-of-thought reasoning.
+**Biological Reinforcement Learning from Human Feedback**: A framework for fine-tuning LLMs on biological reasoning tasks using SFT, DPO, and GRPO with verifier-based reward models for factual accuracy, calibrated uncertainty, and chain-of-thought reasoning.
 
 ## Highlights
 
@@ -16,7 +16,7 @@
 - **+32% reward improvement** over SFT baseline using GRPO with V4-dominant calibration pressure
 - **-62% calibration error**: ECE reduced from 0.478 to 0.183 after GRPO (Phase 4)
 - **90% accuracy** on domain-specific biological reasoning tasks (SFT stage)
-- **Learns from 363 examples** — efficient domain adaptation from spaceflight transcriptomics data
+- **Learns from 363 examples**: efficient domain adaptation from spaceflight transcriptomics data
 - **Pre-trained models**: [SFT](https://huggingface.co/jang1563/biorlhf-sft-mistral-7b) and [GRPO](https://huggingface.co/jang1563/biorlhf-grpo-mistral-7b) adapters on HuggingFace
 
 ## Key Results
@@ -31,7 +31,7 @@
 
 > SFT baselines differ between eval runs due to evaluation methodology updates. Absolute metrics (reward, ECE) are directly comparable across phases.
 
-**GRPO Configuration (Phase 4 — recommended):**
+**GRPO Configuration (Phase 4: recommended):**
 - 16 generations per prompt (G=16) for robust advantage estimation
 - Multi-reward: V1 (factual, 0.30) + V2 (pathway, 0.15) + V3 (consistency, 0.10) + V4 (uncertainty, **0.45**)
 - KL penalty beta=0.02, 2 iterations per batch, group-normalized rewards
@@ -208,8 +208,8 @@ reward = composer.score(question, response, ground_truth)
 Training data is derived from a 2x2x2 factorial transcriptomic study:
 
 - **Drug**: Kaempferol (KMP) vs Control
-- **Stressor 1**: Hindlimb Unloading (HU) — simulates microgravity
-- **Stressor 2**: Ionizing Radiation (IR) — simulates space radiation
+- **Stressor 1**: Hindlimb Unloading (HU): simulates microgravity
+- **Stressor 2**: Ionizing Radiation (IR): simulates space radiation
 - **Tissues**: Heart, Hippocampus, Liver, Soleus (+ Eye, Thymus for GRPO hold-out)
 
 ### Training Example Types
@@ -302,15 +302,15 @@ BioRLHF/
 
 ## Key Learnings for AI Safety
 
-1. **Honesty is trainable** — Models can learn appropriate epistemic humility
-2. **Domain grounding matters** — Anchoring to experimental truth prevents hallucination
-3. **Multi-reward > single reward** — Decomposing correctness into verifiable dimensions improves learning signal
-4. **Preference learning is fragile** — DPO can catastrophically forget domain knowledge
-5. **Evaluation drives improvement** — Systematic testing reveals specific failure modes
+1. **Honesty is trainable**: Models can learn appropriate epistemic humility
+2. **Domain grounding matters**: Anchoring to experimental truth prevents hallucination
+3. **Multi-reward > single reward**: Decomposing correctness into verifiable dimensions improves learning signal
+4. **Preference learning is fragile**: DPO can catastrophically forget domain knowledge
+5. **Evaluation drives improvement**: Systematic testing reveals specific failure modes
 
 ## Related Projects
 
-- **[SpaceOmicsBench](https://github.com/jang1563/SpaceOmicsBench)** — 115-question benchmark for LLMs on spaceflight biomedical data
+- **[SpaceOmicsBench](https://github.com/jang1563/SpaceOmicsBench)**: 115-question benchmark for LLMs on spaceflight biomedical data
 
 ## Citation
 
@@ -332,7 +332,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License: see the [LICENSE](LICENSE) file for details.
 
 ---
 
