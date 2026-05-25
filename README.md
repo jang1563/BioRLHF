@@ -13,11 +13,13 @@
 
 - **Three-stage training pipeline**: SFT → DPO → GRPO with verifier-based rewards
 - **Multi-reward GRPO**: Four composable verifiers (factual, pathway, consistency, uncertainty) with configurable weights
-- **+32% reward improvement** over SFT baseline using GRPO with V4-dominant calibration pressure
-- **-62% calibration error**: ECE reduced from 0.478 to 0.183 after GRPO (Phase 4)
-- **90% accuracy** on domain-specific biological reasoning tasks (SFT stage)
+- **+22.4% reward improvement** over SFT baseline using GRPO Phase 4 main run (V4-dominant; an exploratory ablation reached +32% but is not the headline configuration)
+- **-62% calibration error** on the 107-question calibration set: ECE reduced from 0.478 (SFT) to 0.183 (GRPO Phase 4)
+- **90% accuracy** on a 20-question domain QA evaluation (SFT stage; this is a separate evaluation set from the calibration and reward metrics above)
 - **Learns from 363 examples**: efficient domain adaptation from spaceflight transcriptomics data
 - **Pre-trained models**: [SFT](https://huggingface.co/jang1563/biorlhf-sft-mistral-7b) and [GRPO](https://huggingface.co/jang1563/biorlhf-grpo-mistral-7b) adapters on HuggingFace
+
+> **Evaluation-set note.** The three metrics above (reward, ECE, accuracy) are measured on three different evaluation sets and should not be read as a single composite score. Absolute reward and ECE are directly comparable across training phases (see Key Results table); the 20-question QA accuracy is a separate stage-level measurement.
 
 ## Key Results
 
